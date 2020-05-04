@@ -89,15 +89,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onDragStart(DragStartDetails d) {
-    _game.startMove(d.localPosition);
+    _game?.startMove(d.localPosition);
   }
 
   void _onDragUpdate(DragUpdateDetails d) {
-    _game.updateMove(d.localPosition);
+    _game?.updateMove(d.localPosition);
   }
 
   void _onDragEnd(DragEndDetails d) {
-    _game.endMove();
+    _game?.endMove();
   }
 
   void _onDragCancel() {

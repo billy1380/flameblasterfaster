@@ -183,11 +183,11 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
   void startMove(Offset localPosition) {}
 
   void updateMove(Offset o) {
-    player.move(o.dx, o.dy);
+    player?.move(o.dx, o.dy);
   }
 
   void endMove() {
-    player.stop();
+    player?.stop();
   }
 
   void _addStars() {
