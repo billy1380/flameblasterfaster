@@ -52,12 +52,12 @@ class BlasterFaster extends BaseGame
 
     _addPlayer();
 
-    add(Spawner(1, _addClever));
-    add(Spawner(2, _addKamikaze));
-    add(Spawner(10, _addPowerUp));
+    addLater(Spawner(1, _addClever));
+    addLater(Spawner(2, _addKamikaze));
+    addLater(Spawner(10, _addPowerUp));
 
-    add(Score());
-    add(Health());
+    addLater(Score());
+    addLater(Health());
 
     _start = true;
     _stop = false;
@@ -71,7 +71,7 @@ class BlasterFaster extends BaseGame
   }
 
   void _addPlayer() {
-    add(player = Player((a, b, c) {
+    addLater(player = Player((a, b, c) {
       _addPrimaryBulets(a, b);
 
       if (c > 0) {
