@@ -48,7 +48,7 @@ class BlasterFaster extends BaseGame
   void start() {
     components
         .where((e) => !(e is ParallaxComponent))
-        .forEach((e) => components.remove(e));
+        .forEach((e) => markToRemove(e));
 
     _addPlayer();
 
