@@ -1,35 +1,26 @@
-import 'package:flame/util.dart';
 import 'package:flameblasterfaster/game/blasterfaster.dart';
 import 'package:flameblasterfaster/widgets/button.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MainScreen extends StatefulWidget {
-  final Util util;
-  MainScreen(this.util, {Key key}) : super(key: key);
+  MainScreen({Key key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState(util);
+  _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   BlasterFaster _game;
-  Util _util;
-  _MainScreenState(this._util);
+
+  _MainScreenState();
 
   @override
   void initState() {
     super.initState();
 
-    _game = BlasterFaster(() => setState(() => {}));
-
-    _util.addGestureRecognizer(PanGestureRecognizer()
-      ..onStart = _onDragStart
-      ..onUpdate = _onDragUpdate
-      ..onEnd = _onDragEnd
-      ..onCancel = _onDragCancel);
+    _game = BlasterFaster(() => setState(() {}));
   }
 
   @override
@@ -86,21 +77,5 @@ class _MainScreenState extends State<MainScreen> {
       );
     }
     return buttons;
-  }
-
-  void _onDragStart(DragStartDetails d) {
-    _game?.startMove(d.localPosition);
-  }
-
-  void _onDragUpdate(DragUpdateDetails d) {
-    _game?.updateMove(d.localPosition);
-  }
-
-  void _onDragEnd(DragEndDetails d) {
-    _game?.endMove();
-  }
-
-  void _onDragCancel() {
-    _onDragEnd(null);
   }
 }

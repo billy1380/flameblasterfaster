@@ -1,5 +1,4 @@
 import 'package:flame/flame.dart';
-import 'package:flame/util.dart';
 import 'package:flameblasterfaster/widgets/screens/mainscreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +10,12 @@ void main() async {
 
   _setupLogging();
 
-  Util util = Util();
-
   if (kIsWeb) {
     Flame.audio.loopLongAudio("music.ogg");
-    runApp(MainScreen(util));
+    runApp(MainScreen());
   } else {
-    await util.fullScreen();
-    await util.setOrientation(DeviceOrientation.portraitUp);
+    await Flame.util.fullScreen();
+    await Flame.util.setOrientation(DeviceOrientation.portraitUp);
 
     Flame.audio.disableLog();
     Flame.audio.loadAll([
@@ -31,7 +28,7 @@ void main() async {
       "music.ogg",
     ]).then((v) {
       Flame.audio.loopLongAudio("music.ogg");
-      runApp(MainScreen(util));
+      runApp(MainScreen());
     });
   }
 }

@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/parallax_component.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game/game.dart';
+import 'package:flame/game/base_game.dart';
+import 'package:flame/gestures.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
 import 'package:flameblasterfaster/components/effects/bleed.dart';
@@ -27,7 +28,8 @@ import 'package:flameblasterfaster/physics/collisionprocessor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class BlasterFaster extends BaseGame with KeyboardEvents {
+class BlasterFaster extends BaseGame
+    with KeyboardEvents, HorizontalDragDetector {
   // static final Logger _log = Logger("BlasterFaster");
 
   Player player;
@@ -95,15 +97,15 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
               (h.b is Player &&
                   (h.a is Enemy ||
                       (h.a is Bullet && (h.a as Bullet).isEnemy)))) {
-            add(Shake(camera, duration: 3, intensity: 100));
-            add(Bleed(camera, 1));
+            addLater(Shake(camera, duration: 3, intensity: 100));
+            addLater(Bleed(camera, 1));
           }
 
           if ((h.a is Player && h.b is Bullet && (h.b as Bullet).isEnemy) ||
               (h.a is Enemy && h.b is Bullet && (h.b as Bullet).isPlayer) ||
               (h.b is Player && h.a is Bullet && (h.a as Bullet).isEnemy) ||
               (h.b is Enemy && h.a is Bullet && (h.a as Bullet).isPlayer)) {
-            add(Flare()
+            addLater(Flare()
               ..x = h.a.frame.topLeft.dx
               ..y = h.a.frame.topLeft.dy);
           }
@@ -126,11 +128,11 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
             }
 
             if (c.isDead) {
-              add(Explosion()
+              addLater(Explosion()
                 ..x = c.frame.topLeft.dx
                 ..y = c.frame.topLeft.dy);
 
-              add(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
+              addLater(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
             }
           } else if (c is Score) {
             score = c;
@@ -140,11 +142,11 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
             if (c.isDead) {
               dead++;
 
-              add(Explosion()
+              addLater(Explosion()
                 ..x = c.frame.topLeft.dx
                 ..y = c.frame.topLeft.dy);
-              add(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
-              add(Shake(this.camera, intensity: 10));
+              addLater(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
+              addLater(Shake(this.camera, intensity: 10));
             }
           }
         }
@@ -191,7 +193,7 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
   }
 
   void _addStars() {
-    add(ParallaxComponent([
+    addLater(ParallaxComponent([
       ParallaxImage("stars_far.png",
           repeat: ImageRepeat.repeatY, alignment: Alignment.center),
       ParallaxImage("stars_close.png",
@@ -203,11 +205,11 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
 
   void _addClever() {
     if (components.where((e) => e is Clever).length <= 2) {
-      add(Clever((a, b, c) {
+      addLater(Clever((a, b, c) {
         Bullet bullet = Bullet(b, up: false);
         double x1 = a.x + a.width * 0.5 - bullet.width * 0.5;
         double y1 = a.y + bullet.height;
-        add(bullet
+        addLater(bullet
           ..x = x1
           ..y = y1);
         Flame.audio.play("laser_enemy.wav");
@@ -217,12 +219,12 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
 
   void _addKamikaze() {
     if (components.where((e) => e is Kamikaze).length == 0) {
-      add(Kamikaze());
+      addLater(Kamikaze());
     }
   }
 
   void _addPowerUp() {
-    add(NumberHelper.random > 0.5 ? Laser() : Armour());
+    addLater(NumberHelper.random > 0.5 ? Laser() : Armour());
   }
 
   @override
@@ -242,21 +244,21 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
     Bullet first = Bullet(b);
     double x1 = a.x - first.width * 0.5;
     double y1 = a.y + first.height;
-    add(first
+    addLater(first
       ..x = x1
       ..y = y1);
 
     Bullet second = Bullet(b);
     double x2 = a.x + a.width - second.width * 0.5;
     double y2 = a.y + second.height;
-    add(second
+    addLater(second
       ..x = x2
       ..y = y2);
 
-    add(Flare()
+    addLater(Flare()
       ..x = x1
       ..y = y1);
-    add(Flare()
+    addLater(Flare()
       ..x = x2
       ..y = y2);
   }
@@ -265,25 +267,50 @@ class BlasterFaster extends BaseGame with KeyboardEvents {
     Bullet first = Bullet(b);
     double x1 = a.x + first.width * 0.5;
     double y1 = a.y + first.height;
-    add(first
+    addLater(first
       ..x = x1
       ..y = y1);
 
     Bullet second = Bullet(b);
     double x2 = a.x + a.width - second.width * 1.5;
     double y2 = a.y + second.height;
-    add(second
+    addLater(second
       ..x = x2
       ..y = y2);
 
-    add(Flare()
+    addLater(Flare()
       ..x = x1
       ..y = y1);
-    add(Flare()
+    addLater(Flare()
       ..x = x2
       ..y = y2);
   }
 
   bool get isRunning => _start && !_stop;
   bool get isPaused => _pause;
+
+  @override
+  void onHorizontalDragDown(DragDownDetails details) {
+    startMove(details.localPosition);
+  }
+
+  @override
+  void onHorizontalDragStart(DragStartDetails details) {
+    startMove(details.localPosition);
+  }
+
+  @override
+  void onHorizontalDragCancel() {
+    endMove();
+  }
+
+  @override
+  void onHorizontalDragUpdate(DragUpdateDetails details) {
+    updateMove(details.localPosition);
+  }
+
+  @override
+  void onHorizontalDragEnd(DragEndDetails details) {
+    endMove();
+  }
 }
