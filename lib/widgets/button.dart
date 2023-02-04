@@ -7,9 +7,14 @@ class Button extends StatefulWidget {
   final String pressed;
   final VoidCallback onPressed;
 
-  Button(this.text, this.normal,
-      {this.hover, this.pressed, @required this.onPressed, Key key})
-      : super(key: key);
+  Button(
+    this.text,
+    this.normal, {
+    this.hover = "",
+    this.pressed = "",
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _ButtonState createState() => _ButtonState(text, normal,
@@ -29,9 +34,9 @@ class _ButtonState extends State<Button> {
   _ButtonState(
     this.text,
     this.normal, {
-    this.hover,
-    this.pressed,
-    this.onPressed,
+    this.hover = "",
+    this.pressed = "",
+    required this.onPressed,
   });
 
   @override
@@ -49,14 +54,16 @@ class _ButtonState extends State<Button> {
             onExit: (e) => _mouseEnter(false),
             child: Image.asset(
               _pressed
-                  ? (pressed == null ? normal : pressed)
-                  : _hover ? (hover == null ? normal : hover) : normal,
+                  ? (pressed == "" ? normal : pressed)
+                  : _hover
+                      ? (hover == "" ? normal : hover)
+                      : normal,
               scale: .5,
             ),
           ),
           Text(
             text,
-            style: Theme.of(context).textTheme.button.copyWith(
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontFamily: "m5x7", color: Colors.white, fontSize: 20),
             textAlign: TextAlign.center,
           ),

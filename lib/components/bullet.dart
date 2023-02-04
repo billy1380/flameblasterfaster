@@ -1,18 +1,26 @@
-import 'package:flame/components/component.dart';
-import 'package:flame/sprite.dart';
+import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
 import 'package:flameblasterfaster/components/ships/player.dart';
+import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
-import 'package:flutter/material.dart';
 
-class Bullet extends SpriteComponent implements Collidable {
+class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
   double speed = 1000;
   final bool up;
-  Size _size;
+  late Vector2 _size;
   String skin;
   bool _hit = false;
 
-  Bullet(this.skin, {this.up = true}) : super.fromSprite(32, 32, Sprite(skin)) {
+  Bullet(
+    this.skin, {
+    this.up = true,
+  }) : super.fromImage(
+          Flame.images.fromCache(skin),
+          size: Vector2(32, 32),
+        ) {
     width *= 0.5;
     height *= 0.5;
   }
@@ -26,7 +34,8 @@ class Bullet extends SpriteComponent implements Collidable {
   }
 
   @override
-  void resize(Size size) {
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _size = size;
   }
 
@@ -38,11 +47,10 @@ class Bullet extends SpriteComponent implements Collidable {
   }
 
   @override
-  bool destroy() {
-    bool destroy = super.destroy();
+  bool get destroy {
+    bool destroy = false;
 
-    if (!destroy &&
-        ((up && y < -height) || (!up && y > _size.height) || _hit)) {
+    if (!destroy && ((up && y < -height) || (!up && y > _size.x) || _hit)) {
       destroy = true;
     }
 

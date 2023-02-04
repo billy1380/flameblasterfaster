@@ -1,32 +1,30 @@
-import 'package:flame/flame.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
 import 'package:flameblasterfaster/components/ships/player.dart';
 import 'package:flameblasterfaster/components/ships/ship.dart';
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
-import 'package:flutter/material.dart';
 
 abstract class Enemy extends Ship {
   double _start;
   bool firstX = true;
 
-  Enemy(String skin,
-      {String weaponName, Fired onFire, double fireRate, int armour})
-      : _start = NumberHelper.random,
-        super(skin,
-            weaponName: weaponName,
-            onFire: onFire,
-            fireRate: fireRate,
-            armour: armour,
-            maxArmour: armour) {
+  Enemy(
+    super.skin, {
+    super.weaponName,
+    super.onFire,
+    super.fireRate,
+    super.armour,
+  }) : _start = NumberHelper.random {
     maxSpeed.x = 0;
     canLeaveY = true;
     y = -height;
   }
 
   @override
-  void resize(Size size) {
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
 
     if (firstX) {
       x = max.x * _start;
@@ -38,8 +36,8 @@ abstract class Enemy extends Ship {
   }
 
   @override
-  bool destroy() {
-    return super.destroy() || (y > max.y + height);
+  bool get destroy {
+    return super.destroy || (y > max.y + height);
   }
 
   @override
@@ -55,6 +53,6 @@ abstract class Enemy extends Ship {
   void hurt() {
     super.hurt();
 
-    Flame.audio.play("hit_enemy.wav");
+    FlameAudio.play("hit_enemy.wav");
   }
 }

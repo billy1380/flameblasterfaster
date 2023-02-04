@@ -1,24 +1,25 @@
-import 'package:flame/components/component.dart';
+import 'dart:math';
+
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:flameblasterfaster/components/should_destory.dart';
 
-class Explosion extends SpriteComponent {
-  double _alpha = 1;
-
-  Explosion() : super.fromSprite(64, 64, Sprite("explosion.png")) {
-    Flame.audio.play("explosion.wav");
+class Explosion extends SpriteComponent implements ShouldDestroy {
+  Explosion()
+      : super.fromImage(Flame.images.fromCache("explosion.png"),
+            size: Vector2(64, 64)) {
+    FlameAudio.play("explosion.wav");
   }
 
   @override
   void update(double t) {
     super.update(t);
 
-    _alpha -= t * 8;
+    opacity = max(0, opacity - (t * 8));
 
-    if (_alpha < 0) _alpha = 0;
+    if (opacity < 0) opacity = 0;
 
-    sprite.paint.color = Colors.black.withOpacity(_alpha);
     double s = 1600;
 
     width += s * t;
@@ -29,7 +30,7 @@ class Explosion extends SpriteComponent {
   }
 
   @override
-  bool destroy() {
-    return _alpha <= 0;
+  bool get destroy {
+    return opacity <= 0;
   }
 }

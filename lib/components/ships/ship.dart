@@ -1,45 +1,52 @@
-import 'package:flame/components/component.dart';
-import 'package:flame/position.dart';
-import 'package:flame/sprite.dart';
+import 'dart:ui';
+
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
-import 'package:flutter/material.dart';
 
 typedef Fired = void Function(Ship ship, String weapon, double elevated);
 
-abstract class Ship extends SpriteComponent implements Collidable {
-  final Position maxSpeed = Position(8, 0);
+abstract class Ship extends SpriteComponent
+    implements Collidable, ShouldDestroy {
+  final Vector2 maxSpeed = Vector2(8, 0);
 
-  final Position max = Position(0, 0);
-  final Position stearTo = Position(0, 0);
+  final Vector2 max = Vector2.zero();
+  final Vector2 stearTo = Vector2.zero();
 
-  final String weaponName;
-  final double fireRate;
+  final String? weaponName;
+  final double? fireRate;
   double _timeToNextFire;
 
-  Fired onFire;
+  Fired? onFire;
   int _armour;
   final int _maxArmour;
 
   bool canLeaveX = false;
   bool canLeaveY = false;
 
-  Ship(String skin,
-      {this.onFire,
-      this.weaponName,
-      int armour = 2,
-      int maxArmour = 2,
-      this.fireRate = 0.3})
-      : _maxArmour = maxArmour,
-        _timeToNextFire = fireRate,
+  Ship(
+    String skin, {
+    required this.onFire,
+    required this.weaponName,
+    int armour = 2,
+    int maxArmour = 2,
+    this.fireRate = 0.3,
+  })  : _maxArmour = maxArmour,
+        _timeToNextFire = fireRate ?? 0,
         _armour = armour,
-        super.fromSprite(64.0, 64.0, Sprite(skin));
+        super.fromImage(
+          Flame.images.fromCache(skin),
+          size: Vector2(64.0, 64.0),
+        );
 
   int get health => _armour;
 
   @override
-  void resize(Size size) {
-    max.x = size.width - width;
-    max.y = size.height - height;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    max.x = size.x - width;
+    max.y = size.y - height;
   }
 
   void move(double dx, double dy) {
@@ -95,7 +102,7 @@ abstract class Ship extends SpriteComponent implements Collidable {
 
       if (_timeToNextFire <= 0) {
         fire();
-        _timeToNextFire = fireRate;
+        _timeToNextFire = fireRate ?? 0;
       }
     }
   }
@@ -106,7 +113,9 @@ abstract class Ship extends SpriteComponent implements Collidable {
   }
 
   void fire() {
-    onFire(this, weaponName, 1);
+    if (onFire != null && weaponName != null) {
+      onFire!(this, weaponName!, 1);
+    }
   }
 
   get isDead {
@@ -139,7 +148,7 @@ abstract class Ship extends SpriteComponent implements Collidable {
   }
 
   @override
-  bool destroy() {
+  bool get destroy {
     return isDead;
   }
 }

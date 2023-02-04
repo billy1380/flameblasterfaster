@@ -1,26 +1,25 @@
-import 'package:flame/animation.dart';
-import 'package:flame/components/animation_component.dart';
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 
-class Health extends AnimationComponent {
+class Health extends SpriteAnimationComponent {
   Health()
       : super(
-            94,
-            40,
-            Animation.sequenced("armor.png", 5,
-                textureHeight: 20, textureWidth: 235 * 0.2)) {
-    animation.currentIndex = 0;
-    animation.loop = false;
-    x = 10;
-    y = 20;
-  }
-
-  @override
-  bool isHud() => true;
-
-  @override
-  int priority() => 100;
+          animation: SpriteAnimation.fromFrameData(
+              Flame.images.fromCache("armor.png"),
+              SpriteAnimationData.sequenced(
+                loop: false,
+                amount: 5,
+                amountPerRow: 5,
+                stepTime: 1,
+                textureSize: Vector2(235 * .2, 20),
+              )),
+          scale: Vector2.all(2),
+          size: Vector2(235 * .2, 20),
+          priority: 100,
+          position: Vector2(10, 20),
+        );
 
   set health(int value) {
-    animation.currentIndex = value;
+    animation?.currentIndex = value;
   }
 }

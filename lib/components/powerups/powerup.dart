@@ -1,26 +1,32 @@
-import 'package:flame/components/component.dart';
-import 'package:flame/sprite.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
-import 'package:flameblasterfaster/helpers/numberhelper.dart';
-import 'package:flameblasterfaster/components/ships/player.dart';
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-abstract class PowerUp extends SpriteComponent implements Collidable {
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+import 'package:flameblasterfaster/components/ships/player.dart';
+import 'package:flameblasterfaster/components/should_destory.dart';
+import 'package:flameblasterfaster/helpers/numberhelper.dart';
+import 'package:flameblasterfaster/physics/collideable.dart';
+
+abstract class PowerUp extends SpriteComponent
+    implements Collidable, ShouldDestroy {
   final double _start;
-  Size _size;
+  late Vector2 _size;
   bool _consumed = false;
 
   PowerUp(String skin)
       : _start = NumberHelper.random,
-        super.fromSprite(28.0, 28.0, Sprite(skin));
+        super.fromImage(
+          Flame.images.fromCache(skin),
+          size: Vector2(28.0, 28.0),
+        );
 
   @override
-  void resize(Size size) {
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
 
     _size = size;
 
-    x = _start * size.width - width * 0.5;
+    x = _start * size.x - width * 0.5;
   }
 
   @override
@@ -31,10 +37,10 @@ abstract class PowerUp extends SpriteComponent implements Collidable {
   }
 
   @override
-  bool destroy() {
-    bool destroy = super.destroy();
+  bool get destroy {
+    bool destroy = false;
 
-    if (!destroy && (y > _size.height || _consumed)) {
+    if (!destroy && (y > _size.x || _consumed)) {
       destroy = true;
     }
 

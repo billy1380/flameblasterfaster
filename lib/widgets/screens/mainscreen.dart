@@ -1,3 +1,4 @@
+import 'package:flame/game.dart';
 import 'package:flameblasterfaster/game/blasterfaster.dart';
 import 'package:flameblasterfaster/widgets/button.dart';
 import 'package:flutter/foundation.dart';
@@ -5,14 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key key}) : super(key: key);
+  MainScreen({Key? key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  BlasterFaster _game;
+  late final BlasterFaster _game;
+  late final GameWidget _gameWidget;
 
   _MainScreenState();
 
@@ -21,6 +23,9 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     _game = BlasterFaster(() => setState(() {}));
+    _gameWidget = GameWidget(
+      game: _game,
+    );
   }
 
   @override
@@ -47,10 +52,10 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildScreen() {
     return _game.isRunning && !_game.isPaused
-        ? _game.widget
+        ? _gameWidget
         : Stack(
             children: <Widget>[
-              _game.widget,
+              _gameWidget,
               Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

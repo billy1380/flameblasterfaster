@@ -1,16 +1,21 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
-import 'package:flame/position.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flutter/material.dart';
 
-class Shake extends Component {
+class Shake extends Component implements ShouldDestroy {
   double duration;
-  double intensity = 100;
-  final Position camera;
+  double intensity;
+  final Camera camera;
 
-  Shake(this.camera, {this.duration = 1, this.intensity});
+  Shake(
+    this.camera, {
+    this.duration = 1,
+    this.intensity = 100,
+  });
 
   @override
   void render(Canvas c) {}
@@ -20,16 +25,16 @@ class Shake extends Component {
     duration -= dt * 10;
 
     if (duration <= 0) {
-      camera.x = 0;
-      camera.y = 0;
+      camera.position.x = 0;
+      camera.position.y = 0;
     } else {
-      camera.x = (NumberHelper.random - 0.5) * intensity;
-      camera.y = (NumberHelper.random - 0.5) * intensity;
+      camera.position.x = (NumberHelper.random - 0.5) * intensity;
+      camera.position.y = (NumberHelper.random - 0.5) * intensity;
     }
   }
 
   @override
-  bool destroy() {
+  bool get destroy {
     return duration <= 0;
   }
 }

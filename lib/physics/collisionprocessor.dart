@@ -1,4 +1,4 @@
-import 'package:flame/components/component.dart';
+import 'package:flame/components.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
 
 class CollisionProcessor {

@@ -1,13 +1,14 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
+import 'package:flame/components.dart';
+import 'package:flameblasterfaster/components/should_destory.dart';
 
 typedef void Spawn();
 
-class Spawner extends Component {
+class Spawner extends Component implements ShouldDestroy {
   final Spawn spawn;
   final double after;
-  int times;
+  int? times;
   double _passed = 0;
   bool stop = false;
 
@@ -26,14 +27,14 @@ class Spawner extends Component {
         spawn();
 
         if (times != null) {
-          times--;
+          times = times! - 1;
         }
       }
     }
   }
 
   @override
-  bool destroy() {
-    return times != null && times >= 0;
+  bool get destroy {
+    return times != null && times! >= 0;
   }
 }

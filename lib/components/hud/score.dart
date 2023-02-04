@@ -1,59 +1,55 @@
-import 'package:flame/components/text_component.dart';
-import 'package:flame/position.dart';
-import 'package:flame/sprite.dart';
-import 'package:flame/text_config.dart';
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
-class Score extends TextComponent {
+class Score extends Component {
   int _score = 0;
-  Sprite _background;
-  Position _backgroundPosition;
+  late TextComponent _tc;
+  late SpriteComponent _bc;
 
-  Score() : super(0.toString().padLeft(6, "0")) {
-    config = TextConfig(fontSize: 32, color: Colors.white, fontFamily: "m5x7");
-    _background = Sprite("score.png");
-    _backgroundPosition = this.toPosition();
+  Score() {
+    _tc = TextComponent(
+        text: 0.toString().padLeft(6, "0"),
+        priority: 100,
+        textRenderer: TextPaint(
+          style: TextStyle(
+            fontSize: 32,
+            color: Colors.white,
+            fontFamily: "m5x7",
+          ),
+        ));
+    _bc = SpriteComponent(
+      sprite: Sprite(
+        Flame.images.fromCache("score.png"),
+      ),
+      scale: Vector2.all(2),
+    );
+
+    add(_bc);
+    add(_tc);
   }
 
   @override
-  void resize(Size size) {
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
 
-    x = size.width - width - 10;
+    x = size.x - (_bc.width * _bc.scale.x) + 10;
     y = 10;
   }
 
   void increment(int by) {
     _score += by;
 
-    this.text = _score.toString().padLeft(6, "0");
+    _tc.text = _score.toString().padLeft(6, "0");
   }
 
-  @override
   set x(double value) {
-    super.x = value - 10;
-    _backgroundPosition.x = value - 22;
+    _tc.x = value - 10;
+    _bc.x = value - 22;
   }
 
-  @override
   set y(double value) {
-    super.y = value + 8;
-    _backgroundPosition.y = value + 8;
-  }
-
-  @override
-  bool isHud() {
-    return true;
-  }
-
-  @override
-  void render(Canvas c) {
-    _background.renderScaled(c, _backgroundPosition, scale: 2);
-    super.render(c);
-  }
-
-  @override
-  int priority() {
-    return 100;
+    _tc.y = value + 8;
+    _bc.y = value + 8;
   }
 }

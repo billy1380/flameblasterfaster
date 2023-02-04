@@ -1,36 +1,40 @@
-import 'package:flame/flame.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
 import 'package:flameblasterfaster/components/powerups/armour.dart';
 import 'package:flameblasterfaster/components/powerups/laser.dart';
 import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
 import 'package:flameblasterfaster/components/ships/ship.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
-import 'package:flutter/material.dart';
 
 class Player extends Ship {
   double _elevatedFirePower = 0;
 
   Player(Fired onFire)
-      : super("ship.png",
-            weaponName: "laser_ship.png",
-            onFire: onFire,
-            armour: 4,
-            maxArmour: 4);
+      : super(
+          "ship.png",
+          weaponName: "laser_ship.png",
+          onFire: onFire,
+          armour: 4,
+          maxArmour: 4,
+        );
 
   @override
-  void resize(Size size) {
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
 
-    x = (size.width - width) * 0.5;
+    x = (size.x - width) * 0.5;
 
-    y = size.height - height * 2;
+    y = size.y - height * 2;
 
     stop();
   }
 
   @override
   void fire() {
-    onFire(this, weaponName, _elevatedFirePower);
+    if (onFire != null && weaponName != null) {
+      onFire!(this, weaponName!, _elevatedFirePower);
+    }
   }
 
   @override
@@ -38,6 +42,10 @@ class Player extends Ship {
     super.update(t);
 
     _elevatedFirePower -= t;
+
+    if (_elevatedFirePower < 0) {
+      _elevatedFirePower = 0;
+    }
   }
 
   @override
@@ -46,10 +54,10 @@ class Player extends Ship {
       hurt();
     } else if (c is Armour) {
       heal();
-      Flame.audio.play("powerup.wav");
+      FlameAudio.play("powerup.wav");
     } else if (c is Laser) {
       _elevatedFirePower = 10;
-      Flame.audio.play("powerup.wav");
+      FlameAudio.play("powerup.wav");
     } else if (c is Bullet && c.skin.contains("_enemy")) {
       hurt();
     }
@@ -59,6 +67,6 @@ class Player extends Ship {
   void hurt() {
     super.hurt();
 
-    Flame.audio.play("hit_ship.wav");
+    FlameAudio.play("hit_ship.wav");
   }
 }

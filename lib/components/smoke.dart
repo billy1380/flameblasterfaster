@@ -1,9 +1,7 @@
-import 'package:flame/components/particle_component.dart';
-import 'package:flame/particle.dart';
-import 'package:flame/particles/moving_particle.dart';
-import 'package:flame/particles/sprite_particle.dart';
-import 'package:flame/position.dart';
-import 'package:flame/sprite.dart';
+import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
+import 'package:flame/particles.dart';
+
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +9,12 @@ class SmokeParticle extends SpriteParticle {
   double _alpha = NumberHelper.random;
   SmokeParticle()
       : super(
-          sprite: Sprite(
-            "smoke.png",
-          ),
+          sprite: Sprite(Flame.images.fromCache("smoke.png")),
           size: _size(),
         );
-  static Position _size() {
+  static Vector2 _size() {
     double s = 64 * NumberHelper.random;
-    return Position(s, s);
+    return Vector2(s, s);
   }
 
   @override
@@ -34,21 +30,23 @@ class SmokeParticle extends SpriteParticle {
 
   @override
   void render(Canvas canvas) {
-    sprite.paint.color = Colors.black.withOpacity(_alpha);
+    sprite.paint.color = Colors.white.withOpacity(_alpha);
     super.render(canvas);
   }
 }
 
-class Smoke extends ParticleComponent {
+class Smoke extends ParticleSystemComponent {
   Smoke(x, y)
       : super(
-            particle: Particle.generate(
-                count: 30,
-                generator: (i) => MovingParticle(
-                      child: SmokeParticle(),
-                      from: Offset(x, y),
-                      to: Offset(x + 100 * (NumberHelper.random - 0.5),
-                          y + 100 * (NumberHelper.random - 0.5)),
-                      lifespan: 10000,
-                    )));
+          particle: Particle.generate(
+            count: 30,
+            generator: (i) => MovingParticle(
+              child: SmokeParticle(),
+              from: Vector2(x, y),
+              to: Vector2(x + 100 * (NumberHelper.random - 0.5),
+                  y + 100 * (NumberHelper.random - 0.5)),
+              lifespan: 10000,
+            ),
+          ),
+        );
 }
