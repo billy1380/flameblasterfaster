@@ -50,7 +50,7 @@ class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
   bool get destroy {
     bool destroy = false;
 
-    if (!destroy && ((up && y < -height) || (!up && y > _size.x) || _hit)) {
+    if (!destroy && ((up && y < -height) || (!up && y > _size.y) || _hit)) {
       destroy = true;
     }
 
@@ -66,6 +66,8 @@ class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
       _hit = true;
     } else if (c is Player && isEnemy) {
       _hit = true;
+    } else {
+      _hit = false;
     }
   }
 

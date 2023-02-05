@@ -40,7 +40,7 @@ abstract class PowerUp extends SpriteComponent
   bool get destroy {
     bool destroy = false;
 
-    if (!destroy && (y > _size.x || _consumed)) {
+    if (!destroy && ((y > _size.y) || _consumed)) {
       destroy = true;
     }
 
