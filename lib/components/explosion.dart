@@ -13,20 +13,20 @@ class Explosion extends SpriteComponent implements ShouldDestroy {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
+  void update(double dt) {
+    super.update(dt);
 
-    opacity = max(0, opacity - (t * 8));
+    opacity = max(0, opacity - (dt * 8));
 
     if (opacity < 0) opacity = 0;
 
     double s = 1600;
 
-    width += s * t;
-    height += s * t;
+    width += s * dt;
+    height += s * dt;
 
-    x -= s * 0.5 * t;
-    y -= s * 0.5 * t;
+    x -= s * 0.5 * dt;
+    y -= s * 0.5 * dt;
   }
 
   @override

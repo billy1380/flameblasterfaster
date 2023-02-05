@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -39,19 +39,19 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildWebScreen() {
     return Container(
-      color: Color(0xFF3a1439),
+      color: const Color(0xFF3a1439),
       child: Center(
         child: SizedBox(
-          child: ClipRect(child: _buildScreen()),
           width: 320,
           height: 600,
+          child: ClipRect(child: _buildScreen()),
         ),
       ),
     );
   }
 
   Widget _buildScreen() {
-    return _game.isRunning && !_game.isPaused
+    return _game.isRunning && !_game.paused
         ? _gameWidget
         : Stack(
             children: <Widget>[

@@ -55,8 +55,8 @@ abstract class Ship extends SpriteComponent
   }
 
   @override
-  void update(double t) {
-    super.update(t);
+  void update(double dt) {
+    super.update(dt);
 
     double finalX = stearTo.x - (width * 0.5);
     double finalY = stearTo.y - (height * 0.5);
@@ -97,8 +97,8 @@ abstract class Ship extends SpriteComponent
       }
     }
 
-    if (this.onFire != null && this.weaponName != null) {
-      _timeToNextFire -= t;
+    if (onFire != null && weaponName != null) {
+      _timeToNextFire -= dt;
 
       if (_timeToNextFire <= 0) {
         fire();

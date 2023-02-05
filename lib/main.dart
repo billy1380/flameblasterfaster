@@ -15,7 +15,7 @@ void main() async {
 
   if (kIsWeb) {
     FlameAudio.loopLongAudio("music.ogg");
-    runApp(MainScreen());
+    runApp(const MainScreen());
   } else {
     await Flame.device.fullScreen();
     await Flame.device.setOrientation(DeviceOrientation.portraitUp);
@@ -34,7 +34,7 @@ void main() async {
       } else {
         FlameAudio.loopLongAudio("music.ogg");
       }
-      runApp(MainScreen());
+      runApp(const MainScreen());
     });
   }
 }
@@ -42,6 +42,6 @@ void main() async {
 void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
-    print("${record.level.name}: ${record.time}: ${record.message}");
+    stdout.write("${record.level.name}: ${record.time}: ${record.message}");
   });
 }

@@ -18,7 +18,7 @@ class Shake extends Component implements ShouldDestroy {
   });
 
   @override
-  void render(Canvas c) {}
+  void render(Canvas canvas) {}
 
   @override
   void update(double dt) {

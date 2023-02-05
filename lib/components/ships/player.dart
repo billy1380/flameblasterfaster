@@ -38,10 +38,10 @@ class Player extends Ship {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
+  void update(double dt) {
+    super.update(dt);
 
-    _elevatedFirePower -= t;
+    _elevatedFirePower -= dt;
 
     if (_elevatedFirePower < 0) {
       _elevatedFirePower = 0;

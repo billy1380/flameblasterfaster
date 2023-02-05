@@ -23,10 +23,10 @@ class Bleed extends Component implements ShouldDestroy {
   }
 
   @override
-  void render(Canvas c) {
+  void render(Canvas canvas) {
     Paint p = Paint();
     p.color = Colors.red.withOpacity(_alpha);
-    c.drawRect(
+    canvas.drawRect(
         Rect.fromLTRB(camera.position.x, camera.position.y, _size.x, _size.y),
         p);
   }

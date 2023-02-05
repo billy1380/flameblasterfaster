@@ -30,10 +30,10 @@ abstract class PowerUp extends SpriteComponent
   }
 
   @override
-  void update(double t) {
-    y += t * 200;
+  void update(double dt) {
+    y += dt * 200;
 
-    super.update(t);
+    super.update(dt);
   }
 
   @override

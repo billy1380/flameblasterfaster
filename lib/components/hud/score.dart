@@ -12,7 +12,7 @@ class Score extends Component {
         text: 0.toString().padLeft(6, "0"),
         priority: 100,
         textRenderer: TextPaint(
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 32,
             color: Colors.white,
             fontFamily: "m5x7",

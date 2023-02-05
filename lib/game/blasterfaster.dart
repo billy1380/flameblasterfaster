@@ -36,7 +36,6 @@ class BlasterFaster extends FlameGame
 
   Player? player;
   bool _stop = false;
-  bool _pause = false;
   bool _start = false;
 
   final VoidCallback finished;
@@ -44,7 +43,7 @@ class BlasterFaster extends FlameGame
   Vector2 _size =
       Vector2(window.physicalSize.width, window.physicalSize.height);
 
-  BlasterFaster(this.finished) {}
+  BlasterFaster(this.finished);
 
   @override
   Future<void> onLoad() async {
@@ -74,7 +73,7 @@ class BlasterFaster extends FlameGame
       );
 
   void start() {
-    children.where((e) => !(e is ParallaxComponent)).forEach((e) => remove(e));
+    children.where((e) => e is! ParallaxComponent).forEach((e) => remove(e));
 
     _addPlayer();
 
@@ -90,10 +89,10 @@ class BlasterFaster extends FlameGame
   }
 
   @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
 
-    _size = size;
+    _size = canvasSize;
   }
 
   void _addPlayer() {
@@ -109,12 +108,12 @@ class BlasterFaster extends FlameGame
   }
 
   @override
-  void update(double t) {
-    super.update(t);
+  void update(double dt) {
+    super.update(dt);
 
     if (_start) {
       if (!_stop) {
-        List<Hit> hits = CollisionProcessor.process(this.children);
+        List<Hit> hits = CollisionProcessor.process(children);
 
         for (Hit h in hits) {
           if ((h.a is Player &&
@@ -172,7 +171,7 @@ class BlasterFaster extends FlameGame
                 ..x = c.frame.topLeft.dx
                 ..y = c.frame.topLeft.dy);
               add(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
-              add(Shake(this.camera, intensity: 10));
+              add(Shake(camera, intensity: 10));
             }
           }
         }
@@ -211,7 +210,7 @@ class BlasterFaster extends FlameGame
 
   @override
   Color backgroundColor() {
-    return Color(0xFF3a1439);
+    return const Color(0xFF3a1439);
   }
 
   void startMove(Vector2 localPosition) {}
@@ -245,7 +244,7 @@ class BlasterFaster extends FlameGame
   }
 
   void _addClever() {
-    if (children.where((e) => e is Clever).length <= 2) {
+    if (children.whereType<Clever>().length <= 2) {
       add(Clever((a, b, c) {
         Bullet bullet = Bullet(b, up: false);
         double x1 = a.x + a.width * 0.5 - bullet.width * 0.5;
@@ -259,7 +258,7 @@ class BlasterFaster extends FlameGame
   }
 
   void _addKamikaze() {
-    if (children.where((e) => e is Kamikaze).length == 0) {
+    if (children.whereType<Kamikaze>().isEmpty) {
       add(Kamikaze());
     }
   }
@@ -279,6 +278,8 @@ class BlasterFaster extends FlameGame
     } else if (event.isKeyPressed(LogicalKeyboardKey.keyD) ||
         event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
       updateMove(Vector2(_size.x, 0));
+    } else if (event.isKeyPressed(LogicalKeyboardKey.space)) {
+      paused = !paused;
     } else {
       endMove();
     }
@@ -333,16 +334,15 @@ class BlasterFaster extends FlameGame
   }
 
   bool get isRunning => _start && !_stop;
-  bool get isPaused => _pause;
 
   @override
-  void onHorizontalDragDown(DragDownInfo details) {
-    startMove(details.eventPosition.game);
+  void onHorizontalDragDown(DragDownInfo info) {
+    startMove(info.eventPosition.game);
   }
 
   @override
-  void onHorizontalDragStart(DragStartInfo details) {
-    startMove(details.eventPosition.game);
+  void onHorizontalDragStart(DragStartInfo info) {
+    startMove(info.eventPosition.game);
   }
 
   @override
@@ -351,12 +351,12 @@ class BlasterFaster extends FlameGame
   }
 
   @override
-  void onHorizontalDragUpdate(DragUpdateInfo details) {
-    updateMove(details.eventPosition.game);
+  void onHorizontalDragUpdate(DragUpdateInfo info) {
+    updateMove(info.eventPosition.game);
   }
 
   @override
-  void onHorizontalDragEnd(DragEndInfo details) {
+  void onHorizontalDragEnd(DragEndInfo info) {
     endMove();
   }
 }

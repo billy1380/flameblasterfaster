@@ -13,13 +13,13 @@ class Clever extends Enemy {
   }
 
   @override
-  void update(double t) {
+  void update(double dt) {
     if (x == max.x) {
       move(0, stearTo.y);
     } else if (x == 0) {
       move(max.x + width, stearTo.y);
     }
 
-    super.update(t);
+    super.update(dt);
   }
 }

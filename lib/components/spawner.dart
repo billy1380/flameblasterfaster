@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flameblasterfaster/components/should_destory.dart';
 
-typedef void Spawn();
+typedef Spawn = void Function();
 
 class Spawner extends Component implements ShouldDestroy {
   final Spawn spawn;
@@ -15,12 +13,9 @@ class Spawner extends Component implements ShouldDestroy {
   Spawner(this.after, this.spawn, {this.times});
 
   @override
-  void render(Canvas c) {}
-
-  @override
-  void update(double t) {
+  void update(double dt) {
     if (!stop) {
-      _passed += t;
+      _passed += dt;
 
       if (_passed > after) {
         _passed = 0;

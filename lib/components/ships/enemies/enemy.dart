@@ -7,7 +7,7 @@ import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
 
 abstract class Enemy extends Ship {
-  double _start;
+  final double _start;
   bool firstX = true;
 
   Enemy(

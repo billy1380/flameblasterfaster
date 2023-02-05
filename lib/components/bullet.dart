@@ -40,10 +40,10 @@ class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
   }
 
   @override
-  void update(double t) {
-    super.update(t);
+  void update(double dt) {
+    super.update(dt);
 
-    y = y + (t * speed) * (up ? -1 : 1);
+    y = y + (dt * speed) * (up ? -1 : 1);
   }
 
   @override
