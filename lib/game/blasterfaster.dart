@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -40,8 +39,7 @@ class BlasterFaster extends FlameGame
 
   final VoidCallback finished;
 
-  Vector2 _size =
-      Vector2(window.physicalSize.width, window.physicalSize.height);
+  late Vector2 _size;
 
   BlasterFaster(this.finished);
 
@@ -89,10 +87,10 @@ class BlasterFaster extends FlameGame
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
 
-    _size = canvasSize;
+    _size = size;
   }
 
   void _addPlayer() {

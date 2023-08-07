@@ -10,8 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flame: ^1.6.0
-  flame_audio: ^1.4.0
+  flame: ^1.8.0
+  flame_audio: ^2.0.4
   logging: ^1.0.1
 
 dev_dependencies:

@@ -20,6 +20,6 @@ class Health extends SpriteAnimationComponent {
         );
 
   set health(int value) {
-    animation?.currentIndex = value;
+    animationTicker?.currentIndex = value;
   }
 }
