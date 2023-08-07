@@ -5,7 +5,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
 import 'package:flameblasterfaster/components/effects/bleed.dart';
 import 'package:flameblasterfaster/components/effects/shake.dart';
@@ -23,30 +22,49 @@ import 'package:flameblasterfaster/components/ships/ship.dart';
 import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flameblasterfaster/components/smoke.dart';
 import 'package:flameblasterfaster/components/spawner.dart';
+import 'package:flameblasterfaster/game/audio_manager.dart';
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
 import 'package:flameblasterfaster/physics/collisionprocessor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class BlasterFaster extends FlameGame
     with KeyboardEvents, HorizontalDragDetector {
-  // static final Logger _log = Logger("BlasterFaster");
-
   Player? player;
   bool _stop = false;
   bool _start = false;
+  static const double width = 400;
+  static const double height = 800;
+  static Vector2 max = Vector2(width, height);
 
   final VoidCallback finished;
 
-  late Vector2 _size;
-
-  BlasterFaster(this.finished);
+  BlasterFaster({
+    required this.finished,
+  });
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    // AudioManager.mute();
 
+    if (kIsWeb) {
+      AudioManager.playBackgroundLoop();
+    } else {
+      await Flame.device.fullScreen();
+      await Flame.device.setOrientation(DeviceOrientation.portraitUp);
+
+      AudioManager.load();
+    }
+
+    await _loadAssets();
+
+    _addStars();
+  }
+
+  Future<void> _loadAssets() async {
     await load("flare.png");
     await load("armor.png");
     await load("score.png");
@@ -61,8 +79,6 @@ class BlasterFaster extends FlameGame
     await load("laser_enemy.png");
     await load("explosion.png");
     await load("smoke.png");
-
-    _addStars();
   }
 
   FutureOr<void> load(String fileName) => images.load(
@@ -86,23 +102,18 @@ class BlasterFaster extends FlameGame
     _stop = false;
   }
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-
-    _size = size;
-  }
-
   void _addPlayer() {
-    add(player = Player((a, b, c) {
-      _addPrimaryBulets(a, b);
+    add(player = Player(
+      (ship, weapon, elevated) {
+        _addPrimaryBulets(ship, weapon);
 
-      if (c > 0) {
-        _addSecondaryBulets(a, b);
-      }
+        if (elevated > 0) {
+          _addSecondaryBulets(ship, weapon);
+        }
 
-      FlameAudio.play("laser_ship.wav");
-    }));
+        AudioManager.play("laser_ship.wav");
+      },
+    ));
   }
 
   @override
@@ -157,10 +168,6 @@ class BlasterFaster extends FlameGame
 
               add(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
             }
-          } else if (c is Score) {
-            score = c;
-          } else if (c is Health) {
-            health = c;
           } else if (c is Enemy) {
             if (c.isDead) {
               dead++;
@@ -174,6 +181,14 @@ class BlasterFaster extends FlameGame
           }
         }
 
+        for (Component c in children) {
+          if (c is Score) {
+            score = c;
+          } else if (c is Health) {
+            health = c;
+          }
+        }
+
         score.increment(dead);
 
         if (player.health >= 0) {
@@ -184,9 +199,6 @@ class BlasterFaster extends FlameGame
           for (Component c in children) {
             if (c is Spawner) {
               c.stop = true;
-            } else if (c is ParallaxComponent) {
-              // c.baseSpeed = Offset(0, 0);
-              // c.layerDelta = Offset(0, 0);
             }
           }
         }
@@ -243,15 +255,17 @@ class BlasterFaster extends FlameGame
 
   void _addClever() {
     if (children.whereType<Clever>().length <= 2) {
-      add(Clever((a, b, c) {
-        Bullet bullet = Bullet(b, up: false);
-        double x1 = a.x + a.width * 0.5 - bullet.width * 0.5;
-        double y1 = a.y + bullet.height;
-        add(bullet
-          ..x = x1
-          ..y = y1);
-        FlameAudio.play("laser_enemy.wav");
-      }));
+      add(Clever(
+        (a, b, c) {
+          Bullet bullet = Bullet(b, up: false);
+          double x1 = a.x + a.width * 0.5 - bullet.width * 0.5;
+          double y1 = a.y + bullet.height;
+          add(bullet
+            ..x = x1
+            ..y = y1);
+          AudioManager.play("laser_enemy.wav");
+        },
+      ));
     }
   }
 
@@ -275,7 +289,7 @@ class BlasterFaster extends FlameGame
       updateMove(Vector2.zero());
     } else if (event.isKeyPressed(LogicalKeyboardKey.keyD) ||
         event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-      updateMove(Vector2(_size.x, 0));
+      updateMove(Vector2(canvasSize.x, 0));
     } else if (event.isKeyPressed(LogicalKeyboardKey.space)) {
       paused = !paused;
     } else {

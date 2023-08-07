@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flameblasterfaster/components/should_destory.dart';
+import 'package:flameblasterfaster/game/audio_manager.dart';
 
 class Explosion extends SpriteComponent implements ShouldDestroy {
   Explosion()
       : super.fromImage(Flame.images.fromCache("explosion.png"),
             size: Vector2(64, 64)) {
-    FlameAudio.play("explosion.wav");
+    AudioManager.play("explosion.wav");
   }
 
   @override

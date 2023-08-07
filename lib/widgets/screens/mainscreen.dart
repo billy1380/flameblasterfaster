@@ -22,7 +22,9 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
 
-    _game = BlasterFaster(() => setState(() {}));
+    _game = BlasterFaster(
+      finished: () => setState(() {}),
+    );
     _gameWidget = GameWidget(
       game: _game,
     );

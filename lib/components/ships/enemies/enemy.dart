@@ -1,8 +1,8 @@
 import 'package:flame/extensions.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
 import 'package:flameblasterfaster/components/ships/player.dart';
 import 'package:flameblasterfaster/components/ships/ship.dart';
+import 'package:flameblasterfaster/game/audio_manager.dart';
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
 
@@ -53,6 +53,6 @@ abstract class Enemy extends Ship {
   void hurt() {
     super.hurt();
 
-    FlameAudio.play("hit_enemy.wav");
+    AudioManager.play("hit_enemy.wav");
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flame/extensions.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
 import 'package:flameblasterfaster/components/powerups/armour.dart';
 import 'package:flameblasterfaster/components/powerups/laser.dart';
 import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
 import 'package:flameblasterfaster/components/ships/ship.dart';
+import 'package:flameblasterfaster/game/audio_manager.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
 
 class Player extends Ship {
@@ -54,10 +54,10 @@ class Player extends Ship {
       hurt();
     } else if (c is Armour) {
       heal();
-      FlameAudio.play("powerup.wav");
+      AudioManager.play("powerup.wav");
     } else if (c is Laser) {
       _elevatedFirePower = 10;
-      FlameAudio.play("powerup.wav");
+      AudioManager.play("powerup.wav");
     } else if (c is Bullet && c.skin.contains("_enemy")) {
       hurt();
     }
@@ -67,6 +67,6 @@ class Player extends Ship {
   void hurt() {
     super.hurt();
 
-    FlameAudio.play("hit_ship.wav");
+    AudioManager.play("hit_ship.wav");
   }
 }
