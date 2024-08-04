@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 class Shake extends Component implements ShouldDestroy {
   double duration;
   double intensity;
-  final Camera camera;
+  final CameraComponent camera;
 
   Shake(
     this.camera, {
@@ -23,11 +22,11 @@ class Shake extends Component implements ShouldDestroy {
     duration -= dt * 10;
 
     if (duration <= 0) {
-      camera.position.x = 0;
-      camera.position.y = 0;
+      camera.viewport.position.x = 0;
+      camera.viewport.position.y = 0;
     } else {
-      camera.position.x = (NumberHelper.random - 0.5) * intensity;
-      camera.position.y = (NumberHelper.random - 0.5) * intensity;
+      camera.viewport.position.x = (NumberHelper.random - 0.5) * intensity;
+      camera.viewport.position.y = (NumberHelper.random - 0.5) * intensity;
     }
   }
 

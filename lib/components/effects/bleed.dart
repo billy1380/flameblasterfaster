@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +6,7 @@ class Bleed extends Component implements ShouldDestroy {
   double _duration = 1;
   double _alpha = 0.4;
 
-  final Camera camera;
+  final CameraComponent camera;
   late Vector2 _size;
 
   Bleed(this.camera, this._duration)
@@ -27,7 +26,8 @@ class Bleed extends Component implements ShouldDestroy {
     Paint p = Paint();
     p.color = Colors.red.withOpacity(_alpha);
     canvas.drawRect(
-        Rect.fromLTRB(camera.position.x, camera.position.y, _size.x, _size.y),
+        Rect.fromLTRB(camera.viewport.position.x, camera.viewport.position.y,
+            _size.x, _size.y),
         p);
   }
 

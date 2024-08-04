@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -31,7 +32,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class BlasterFaster extends FlameGame
-    with KeyboardEvents, HorizontalDragDetector {
+    with HasKeyboardHandlerComponents, HorizontalDragDetector {
   Player? player;
   bool _stop = false;
   bool _start = false;
@@ -65,23 +66,23 @@ class BlasterFaster extends FlameGame
   }
 
   Future<void> _loadAssets() async {
-    await load("flare.png");
-    await load("armor.png");
-    await load("score.png");
-    await load("powerup_armor.png");
-    await load("powerup_laser.png");
-    await load("stars_far.png");
-    await load("stars_close.png");
-    await load("ship.png");
-    await load("laser_ship.png");
-    await load("enemy_clever.png");
-    await load("enemy_kamikaze.png");
-    await load("laser_enemy.png");
-    await load("explosion.png");
-    await load("smoke.png");
+    await loadImage("flare.png");
+    await loadImage("armor.png");
+    await loadImage("score.png");
+    await loadImage("powerup_armor.png");
+    await loadImage("powerup_laser.png");
+    await loadImage("stars_far.png");
+    await loadImage("stars_close.png");
+    await loadImage("ship.png");
+    await loadImage("laser_ship.png");
+    await loadImage("enemy_clever.png");
+    await loadImage("enemy_kamikaze.png");
+    await loadImage("laser_enemy.png");
+    await loadImage("explosion.png");
+    await loadImage("smoke.png");
   }
 
-  FutureOr<void> load(String fileName) => images.load(
+  FutureOr<void> loadImage(String fileName) => images.load(
         fileName,
         key: fileName,
       );
@@ -281,16 +282,18 @@ class BlasterFaster extends FlameGame
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    if (event.isKeyPressed(LogicalKeyboardKey.keyA) ||
-        event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+    super.onKeyEvent(event, keysPressed);
+
+    if (keysPressed.contains(LogicalKeyboardKey.keyA) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
       updateMove(Vector2.zero());
-    } else if (event.isKeyPressed(LogicalKeyboardKey.keyD) ||
-        event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.keyD) ||
+        keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
       updateMove(Vector2(canvasSize.x, 0));
-    } else if (event.isKeyPressed(LogicalKeyboardKey.space)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.space)) {
       paused = !paused;
     } else {
       endMove();
@@ -349,12 +352,12 @@ class BlasterFaster extends FlameGame
 
   @override
   void onHorizontalDragDown(DragDownInfo info) {
-    startMove(info.eventPosition.game);
+    startMove(info.eventPosition.widget);
   }
 
   @override
   void onHorizontalDragStart(DragStartInfo info) {
-    startMove(info.eventPosition.game);
+    startMove(info.eventPosition.widget);
   }
 
   @override
@@ -364,7 +367,7 @@ class BlasterFaster extends FlameGame
 
   @override
   void onHorizontalDragUpdate(DragUpdateInfo info) {
-    updateMove(info.eventPosition.game);
+    updateMove(info.eventPosition.widget);
   }
 
   @override

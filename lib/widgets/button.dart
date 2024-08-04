@@ -13,8 +13,8 @@ class Button extends StatefulWidget {
     this.hover = "",
     this.pressed = "",
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<Button> createState() => _ButtonState();
