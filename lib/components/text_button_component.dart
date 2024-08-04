@@ -3,7 +3,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/input.dart';
 import 'package:flameblasterfaster/components/fonts.dart';
-import 'package:flutter/material.dart';
 
 class TextButtonComponent extends ButtonComponent {
   TextButtonComponent({
