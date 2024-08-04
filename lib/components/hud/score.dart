@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter/material.dart';
+import 'package:flameblasterfaster/components/fonts.dart';
 
 class Score extends Component {
   int _score = 0;
@@ -9,15 +9,10 @@ class Score extends Component {
 
   Score() {
     _tc = TextComponent(
-        text: 0.toString().padLeft(6, "0"),
-        priority: 100,
-        textRenderer: TextPaint(
-          style: const TextStyle(
-            fontSize: 32,
-            color: Colors.white,
-            fontFamily: "m5x7",
-          ),
-        ));
+      text: 0.toString().padLeft(6, "0"),
+      priority: 100,
+      textRenderer: Fonts.display,
+    );
     _bc = SpriteComponent(
       sprite: Sprite(
         Flame.images.fromCache("score.png"),

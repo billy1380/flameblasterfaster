@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/image_composition.dart';
 import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
 import 'package:flameblasterfaster/components/bullet.dart';
@@ -23,6 +24,7 @@ import 'package:flameblasterfaster/components/ships/ship.dart';
 import 'package:flameblasterfaster/components/should_destory.dart';
 import 'package:flameblasterfaster/components/smoke.dart';
 import 'package:flameblasterfaster/components/spawner.dart';
+import 'package:flameblasterfaster/components/text_button_component.dart';
 import 'package:flameblasterfaster/game/audio_manager.dart';
 import 'package:flameblasterfaster/helpers/numberhelper.dart';
 import 'package:flameblasterfaster/physics/collideable.dart';
@@ -34,17 +36,13 @@ import 'package:flutter/services.dart';
 class BlasterFaster extends FlameGame
     with HasKeyboardHandlerComponents, HorizontalDragDetector {
   Player? player;
+  TextButtonComponent? _startButton;
+  TextButtonComponent? _quitButton;
   bool _stop = false;
   bool _start = false;
   static const double width = 400;
   static const double height = 800;
   static Vector2 max = Vector2(width, height);
-
-  final VoidCallback finished;
-
-  BlasterFaster({
-    required this.finished,
-  });
 
   @override
   Future<void> onLoad() async {
@@ -63,6 +61,8 @@ class BlasterFaster extends FlameGame
     await _loadAssets();
 
     _addStars();
+
+    _addButtons();
   }
 
   Future<void> _loadAssets() async {
@@ -80,6 +80,9 @@ class BlasterFaster extends FlameGame
     await loadImage("laser_enemy.png");
     await loadImage("explosion.png");
     await loadImage("smoke.png");
+    await loadImage("button_normal.png");
+    await loadImage("button_hover.png");
+    await loadImage("button_pressed.png");
   }
 
   FutureOr<void> loadImage(String fileName) => images.load(
@@ -101,6 +104,16 @@ class BlasterFaster extends FlameGame
 
     _start = true;
     _stop = false;
+  }
+
+  void finished() {
+    if (_startButton != null) {
+      add(_startButton!);
+    }
+
+    if (_quitButton != null) {
+      add(_quitButton!);
+    }
   }
 
   void _addPlayer() {
@@ -254,6 +267,20 @@ class BlasterFaster extends FlameGame
     ));
   }
 
+  void _addButtons() {
+    add(_startButton = TextButtonComponent(
+      label: "Start",
+      onPressed: () => start(),
+    ));
+
+    if (!kIsWeb) {
+      add(_quitButton = TextButtonComponent(
+        label: "Quit",
+        onPressed: () => SystemNavigator.pop(),
+      ));
+    }
+  }
+
   void _addClever() {
     if (children.whereType<Clever>().length <= 2) {
       add(Clever(
@@ -373,5 +400,20 @@ class BlasterFaster extends FlameGame
   @override
   void onHorizontalDragEnd(DragEndInfo info) {
     endMove();
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+
+    _startButton?.position.setValues(
+      camera.viewport.size.x * 0.5,
+      camera.viewport.size.y * 0.5 - (kIsWeb ? 0 : 20),
+    );
+
+    _quitButton?.position.setValues(
+      camera.viewport.size.x * 0.5,
+      camera.viewport.size.y * 0.5 + 20,
+    );
   }
 }
