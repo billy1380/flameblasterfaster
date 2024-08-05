@@ -7,24 +7,27 @@ import 'package:logging/logging.dart';
 class AudioManager {
   static final Logger _log = Logger("AudioManager");
   static bool _muted = false;
+  static AudioPlayer? _loop;
 
   static void mute() {
     _muted = true;
+    _loop?.pause();
   }
 
   static void unmute() {
     _muted = false;
+    _loop?.resume();
   }
 
-  static void playBackgroundLoop() {
+  static Future<void> playBackgroundLoop() async {
     if (_muted) {
       _log.info("Not playing background music because muted is $_muted");
     } else {
-      if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
-        FlameAudio.loopLongAudio("music.mp3");
-      } else {
-        FlameAudio.loopLongAudio("music.ogg");
-      }
+      await _loop?.stop();
+      await _loop?.dispose();
+
+      _loop = await FlameAudio.loopLongAudio(
+          "music.${!kIsWeb && (Platform.isIOS || Platform.isMacOS) ? "mp3" : "ogg"}");
     }
   }
 
@@ -34,6 +37,10 @@ class AudioManager {
     } else {
       FlameAudio.play(name);
     }
+  }
+
+  static void stopBackgroundLoop() {
+    _loop?.stop();
   }
 
   static void load() {

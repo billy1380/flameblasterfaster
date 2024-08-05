@@ -35,11 +35,17 @@ import 'package:flutter/services.dart';
 
 class BlasterFaster extends FlameGame
     with HasKeyboardHandlerComponents, HorizontalDragDetector {
+  BlasterFaster({
+    required this.canQuit,
+  });
+
   Player? player;
   TextButtonComponent? _startButton;
   TextButtonComponent? _quitButton;
   bool _stop = false;
   bool _start = false;
+  final bool canQuit;
+
   static const double width = 400;
   static const double height = 800;
   static Vector2 max = Vector2(width, height);
@@ -273,7 +279,7 @@ class BlasterFaster extends FlameGame
       onPressed: () => start(),
     ));
 
-    if (!kIsWeb) {
+    if (canQuit) {
       add(_quitButton = TextButtonComponent(
         label: "Quit",
         onPressed: () => SystemNavigator.pop(),

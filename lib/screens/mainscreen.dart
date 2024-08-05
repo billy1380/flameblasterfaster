@@ -19,9 +19,11 @@ class MainScreen extends StatelessWidget {
     return Container(
       color: const Color(0xFF3a1439),
       child: Center(
-        child: SizedBox(
-          width: 320,
-          height: 600,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: BlasterFaster.width,
+            maxHeight: BlasterFaster.height,
+          ),
           child: ClipRect(child: _buildScreen()),
         ),
       ),
@@ -29,6 +31,8 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _buildScreen() => GameWidget(
-        game: BlasterFaster(),
+        game: BlasterFaster(
+          canQuit: !kIsWeb,
+        ),
       );
 }
