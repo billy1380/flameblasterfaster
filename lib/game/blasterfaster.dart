@@ -71,6 +71,20 @@ class BlasterFaster extends FlameGame
     _addButtons();
   }
 
+  @override
+  void pauseEngine() {
+    super.pauseEngine();
+
+    AudioManager.stopBackgroundLoop();
+  }
+
+  @override
+  void resumeEngine() {
+    super.resumeEngine();
+
+    AudioManager.playBackgroundLoop();
+  }
+
   Future<void> _loadAssets() async {
     await loadImage("flare.png");
     await loadImage("armor.png");
