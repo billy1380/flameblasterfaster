@@ -1,23 +1,23 @@
-import 'package:flame/extensions.dart';
-import 'package:flameblasterfaster/components/bullet.dart';
-import 'package:flameblasterfaster/components/powerups/armour.dart';
-import 'package:flameblasterfaster/components/powerups/laser.dart';
-import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
-import 'package:flameblasterfaster/components/ships/ship.dart';
-import 'package:flameblasterfaster/game/audio_manager.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
+import "package:flame/extensions.dart";
+import "package:flameblasterfaster/components/bullet.dart";
+import "package:flameblasterfaster/components/powerups/armour.dart";
+import "package:flameblasterfaster/components/powerups/laser.dart";
+import "package:flameblasterfaster/components/ships/enemies/enemy.dart";
+import "package:flameblasterfaster/components/ships/ship.dart";
+import "package:flameblasterfaster/game/audio_manager.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
 
 class Player extends Ship {
   double _elevatedFirePower = 0;
 
   Player(Fired onFire)
-    : super(
-        "ship.png",
-        weaponName: "laser_ship.png",
-        onFire: onFire,
-        armour: 4,
-        maxArmour: 4,
-      );
+      : super(
+          "ship.png",
+          weaponName: "laser_ship.png",
+          onFire: onFire,
+          armour: 4,
+          maxArmour: 4,
+        );
 
   @override
   void onGameResize(Vector2 size) {

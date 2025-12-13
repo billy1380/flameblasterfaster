@@ -1,8 +1,8 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
+import "package:flame_audio/flame_audio.dart";
+import "package:flutter/foundation.dart";
+import "package:logging/logging.dart";
 
 class AudioManager {
   static final Logger _log = Logger("AudioManager");
@@ -45,21 +45,19 @@ class AudioManager {
   }
 
   static void load() {
-    FlameAudio.audioCache
-        .loadAll([
-          "powerup.wav",
-          "explosion.wav",
-          "hit_enemy.wav",
-          "hit_ship.wav",
-          "laser_enemy.wav",
-          "laser_ship.wav",
-          if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
-            "music.mp3"
-          else
-            "music.ogg",
-        ])
-        .then((v) {
-          playBackgroundLoop();
-        });
+    FlameAudio.audioCache.loadAll([
+      "powerup.wav",
+      "explosion.wav",
+      "hit_enemy.wav",
+      "hit_ship.wav",
+      "laser_enemy.wav",
+      "laser_ship.wav",
+      if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+        "music.mp3"
+      else
+        "music.ogg",
+    ]).then((v) {
+      playBackgroundLoop();
+    });
   }
 }

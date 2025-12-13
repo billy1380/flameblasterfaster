@@ -1,6 +1,6 @@
-import 'package:flameblasterfaster/screens/mainscreen.dart';
-import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
+import "package:flameblasterfaster/screens/mainscreen.dart";
+import "package:flutter/material.dart";
+import "package:logging/logging.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

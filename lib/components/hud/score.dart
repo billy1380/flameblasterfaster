@@ -1,6 +1,6 @@
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flameblasterfaster/components/fonts.dart';
+import "package:flame/components.dart";
+import "package:flame/flame.dart";
+import "package:flameblasterfaster/components/fonts.dart";
 
 class Score extends Component {
   int _score = 0;

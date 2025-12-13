@@ -4,14 +4,14 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flame: ^1.18.0
-  flame_audio: ^2.10.2
+  flame: ^1.34.0
+  flame_audio: ^2.11.12
   logging: ^1.0.1
 
 dev_dependencies:

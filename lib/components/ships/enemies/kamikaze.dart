@@ -1,4 +1,4 @@
-import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
+import "package:flameblasterfaster/components/ships/enemies/enemy.dart";
 
 class Kamikaze extends Enemy {
   Kamikaze() : super("enemy_kamikaze.png", armour: 2) {

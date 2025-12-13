@@ -1,40 +1,40 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
-import 'package:flame/image_composition.dart';
-import 'package:flame/input.dart';
-import 'package:flame/parallax.dart';
-import 'package:flameblasterfaster/components/bullet.dart';
-import 'package:flameblasterfaster/components/effects/bleed.dart';
-import 'package:flameblasterfaster/components/effects/shake.dart';
-import 'package:flameblasterfaster/components/explosion.dart';
-import 'package:flameblasterfaster/components/flare.dart';
-import 'package:flameblasterfaster/components/hud/health.dart';
-import 'package:flameblasterfaster/components/hud/score.dart';
-import 'package:flameblasterfaster/components/powerups/armour.dart';
-import 'package:flameblasterfaster/components/powerups/laser.dart';
-import 'package:flameblasterfaster/components/ships/enemies/clever.dart';
-import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
-import 'package:flameblasterfaster/components/ships/enemies/kamikaze.dart';
-import 'package:flameblasterfaster/components/ships/player.dart';
-import 'package:flameblasterfaster/components/ships/ship.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
-import 'package:flameblasterfaster/components/smoke.dart';
-import 'package:flameblasterfaster/components/spawner.dart';
-import 'package:flameblasterfaster/components/text_button_component.dart';
-import 'package:flameblasterfaster/game/audio_manager.dart';
-import 'package:flameblasterfaster/helpers/numberhelper.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
-import 'package:flameblasterfaster/physics/collisionprocessor.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import "package:flame/components.dart";
+import "package:flame/events.dart";
+import "package:flame/flame.dart";
+import "package:flame/game.dart";
+import "package:flame/image_composition.dart";
+import "package:flame/input.dart";
+import "package:flame/parallax.dart";
+import "package:flameblasterfaster/components/bullet.dart";
+import "package:flameblasterfaster/components/effects/bleed.dart";
+import "package:flameblasterfaster/components/effects/shake.dart";
+import "package:flameblasterfaster/components/explosion.dart";
+import "package:flameblasterfaster/components/flare.dart";
+import "package:flameblasterfaster/components/hud/health.dart";
+import "package:flameblasterfaster/components/hud/score.dart";
+import "package:flameblasterfaster/components/powerups/armour.dart";
+import "package:flameblasterfaster/components/powerups/laser.dart";
+import "package:flameblasterfaster/components/ships/enemies/clever.dart";
+import "package:flameblasterfaster/components/ships/enemies/enemy.dart";
+import "package:flameblasterfaster/components/ships/enemies/kamikaze.dart";
+import "package:flameblasterfaster/components/ships/player.dart";
+import "package:flameblasterfaster/components/ships/ship.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
+import "package:flameblasterfaster/components/smoke.dart";
+import "package:flameblasterfaster/components/spawner.dart";
+import "package:flameblasterfaster/components/text_button_component.dart";
+import "package:flameblasterfaster/game/audio_manager.dart";
+import "package:flameblasterfaster/helpers/numberhelper.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
+import "package:flameblasterfaster/physics/collisionprocessor.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 
 class BlasterFaster extends FlameGame
-    with HasKeyboardHandlerComponents, HorizontalDragDetector {
+    with HasKeyboardHandlerComponents, DragCallbacks {
   BlasterFaster({required this.canQuit});
 
   Player? player;
@@ -64,7 +64,7 @@ class BlasterFaster extends FlameGame
 
     await _loadAssets();
 
-    _addStars();
+    await _addStars();
 
     _addButtons();
   }
@@ -269,27 +269,17 @@ class BlasterFaster extends FlameGame
     player?.stop();
   }
 
-  void _addStars() {
+  Future<void> _addStars() async {
     add(
-      ParallaxComponent(
-        parallax: Parallax([
-          ParallaxLayer(
-            ParallaxImage(
-              Flame.images.fromCache("stars_far.png"),
-              repeat: ImageRepeat.repeatY,
-              alignment: Alignment.center,
-            ),
-            velocityMultiplier: Vector2(0, -5),
-          ),
-          ParallaxLayer(
-            ParallaxImage(
-              Flame.images.fromCache("stars_close.png"),
-              repeat: ImageRepeat.repeatY,
-              alignment: Alignment.center,
-            ),
-            velocityMultiplier: Vector2(0, -15),
-          ),
-        ], baseVelocity: Vector2(0, 5)),
+      await loadParallaxComponent(
+        [
+          ParallaxImageData("stars_far.png"),
+          ParallaxImageData("stars_close.png"),
+        ],
+        baseVelocity: Vector2(0, 5),
+        velocityMultiplierDelta: Vector2(0, 5),
+        repeat: ImageRepeat.repeatY,
+        alignment: Alignment.center,
       ),
     );
   }
@@ -426,28 +416,35 @@ class BlasterFaster extends FlameGame
 
   bool get isRunning => _start && !_stop;
 
+  Vector2 _lastDragPosition = Vector2.zero();
+
   @override
-  void onHorizontalDragDown(DragDownInfo info) {
-    startMove(info.eventPosition.widget);
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    if (!kIsWeb) {
+      _lastDragPosition = event.localPosition.clone();
+      startMove(_lastDragPosition);
+    }
   }
 
   @override
-  void onHorizontalDragStart(DragStartInfo info) {
-    startMove(info.eventPosition.widget);
+  void onDragUpdate(DragUpdateEvent event) {
+    super.onDragUpdate(event);
+    if (!kIsWeb) {
+      _lastDragPosition.add(event.localDelta);
+      updateMove(_lastDragPosition);
+    }
   }
 
   @override
-  void onHorizontalDragCancel() {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     endMove();
   }
 
   @override
-  void onHorizontalDragUpdate(DragUpdateInfo info) {
-    updateMove(info.eventPosition.widget);
-  }
-
-  @override
-  void onHorizontalDragEnd(DragEndInfo info) {
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     endMove();
   }
 

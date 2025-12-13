@@ -1,7 +1,7 @@
-import 'package:flame/components.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
-import 'package:flameblasterfaster/helpers/numberhelper.dart';
-import 'package:flutter/material.dart';
+import "package:flame/components.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
+import "package:flameblasterfaster/helpers/numberhelper.dart";
+import "package:flutter/material.dart";
 
 class Shake extends Component implements ShouldDestroy {
   double duration;

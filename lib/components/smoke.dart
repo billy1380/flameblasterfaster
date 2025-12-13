@@ -1,14 +1,15 @@
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flame/particles.dart';
+import "package:flame/components.dart";
+import "package:flame/flame.dart";
+import "package:flame/particles.dart";
+import "package:flutter/material.dart";
 
-import 'package:flameblasterfaster/helpers/numberhelper.dart';
-import 'package:flutter/material.dart';
+import "package:flameblasterfaster/helpers/numberhelper.dart";
 
 class SmokeParticle extends SpriteParticle {
   double _alpha = NumberHelper.random;
   SmokeParticle()
-    : super(sprite: Sprite(Flame.images.fromCache("smoke.png")), size: _size());
+      : super(
+            sprite: Sprite(Flame.images.fromCache("smoke.png")), size: _size());
   static Vector2 _size() {
     double s = 64 * NumberHelper.random;
     return Vector2(s, s);
@@ -27,25 +28,25 @@ class SmokeParticle extends SpriteParticle {
 
   @override
   void render(Canvas canvas) {
-    sprite.paint.color = Colors.white.withOpacity(_alpha);
+    sprite.paint.color = Colors.white.withValues(alpha: _alpha);
     super.render(canvas);
   }
 }
 
 class Smoke extends ParticleSystemComponent {
   Smoke(x, y)
-    : super(
-        particle: Particle.generate(
-          count: 30,
-          generator: (i) => MovingParticle(
-            child: SmokeParticle(),
-            from: Vector2(x, y),
-            to: Vector2(
-              x + 100 * (NumberHelper.random - 0.5),
-              y + 100 * (NumberHelper.random - 0.5),
+      : super(
+          particle: Particle.generate(
+            count: 30,
+            generator: (i) => MovingParticle(
+              child: SmokeParticle(),
+              from: Vector2(x, y),
+              to: Vector2(
+                x + 100 * (NumberHelper.random - 0.5),
+                y + 100 * (NumberHelper.random - 0.5),
+              ),
+              lifespan: 10,
             ),
-            lifespan: 10000,
           ),
-        ),
-      );
+        );
 }

@@ -1,4 +1,4 @@
-import 'dart:math';
+import "dart:math";
 
 class NumberHelper {
   static final Random _r = Random.secure();

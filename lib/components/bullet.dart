@@ -1,11 +1,11 @@
-import 'dart:ui';
+import "dart:ui";
 
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
-import 'package:flameblasterfaster/components/ships/player.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
+import "package:flame/components.dart";
+import "package:flame/flame.dart";
+import "package:flameblasterfaster/components/ships/enemies/enemy.dart";
+import "package:flameblasterfaster/components/ships/player.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
 
 class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
   double speed = 1000;
@@ -15,7 +15,7 @@ class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
   bool _hit = false;
 
   Bullet(this.skin, {this.up = true})
-    : super.fromImage(Flame.images.fromCache(skin), size: Vector2(32, 32)) {
+      : super.fromImage(Flame.images.fromCache(skin), size: Vector2(32, 32)) {
     width *= 0.5;
     height *= 0.5;
   }

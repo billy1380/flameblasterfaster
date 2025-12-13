@@ -1,5 +1,5 @@
-import 'package:flame/components.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
+import "package:flame/components.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
 
 typedef Spawn = void Function();
 

@@ -1,10 +1,10 @@
-import 'package:flame/extensions.dart';
-import 'package:flameblasterfaster/components/bullet.dart';
-import 'package:flameblasterfaster/components/ships/player.dart';
-import 'package:flameblasterfaster/components/ships/ship.dart';
-import 'package:flameblasterfaster/game/audio_manager.dart';
-import 'package:flameblasterfaster/helpers/numberhelper.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
+import "package:flame/extensions.dart";
+import "package:flameblasterfaster/components/bullet.dart";
+import "package:flameblasterfaster/components/ships/player.dart";
+import "package:flameblasterfaster/components/ships/ship.dart";
+import "package:flameblasterfaster/game/audio_manager.dart";
+import "package:flameblasterfaster/helpers/numberhelper.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
 
 abstract class Enemy extends Ship {
   final double _start;

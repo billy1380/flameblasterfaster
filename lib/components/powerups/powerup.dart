@@ -1,11 +1,11 @@
-import 'dart:ui';
+import "dart:ui";
 
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flameblasterfaster/components/ships/player.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
-import 'package:flameblasterfaster/helpers/numberhelper.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
+import "package:flame/components.dart";
+import "package:flame/flame.dart";
+import "package:flameblasterfaster/components/ships/player.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
+import "package:flameblasterfaster/helpers/numberhelper.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
 
 abstract class PowerUp extends SpriteComponent
     implements Collidable, ShouldDestroy {
@@ -14,8 +14,9 @@ abstract class PowerUp extends SpriteComponent
   bool _consumed = false;
 
   PowerUp(String skin)
-    : _start = NumberHelper.random,
-      super.fromImage(Flame.images.fromCache(skin), size: Vector2(28.0, 28.0));
+      : _start = NumberHelper.random,
+        super.fromImage(Flame.images.fromCache(skin),
+            size: Vector2(28.0, 28.0));
 
   @override
   void onGameResize(Vector2 size) {

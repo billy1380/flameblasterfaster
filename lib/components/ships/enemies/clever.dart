@@ -1,15 +1,15 @@
-import 'package:flameblasterfaster/components/ships/enemies/enemy.dart';
-import 'package:flameblasterfaster/components/ships/ship.dart';
+import "package:flameblasterfaster/components/ships/enemies/enemy.dart";
+import "package:flameblasterfaster/components/ships/ship.dart";
 
 class Clever extends Enemy {
   Clever(Fired onFire)
-    : super(
-        "enemy_clever.png",
-        weaponName: "laser_enemy.png",
-        onFire: onFire,
-        fireRate: 1,
-        armour: 2,
-      ) {
+      : super(
+          "enemy_clever.png",
+          weaponName: "laser_enemy.png",
+          onFire: onFire,
+          fireRate: 1,
+          armour: 2,
+        ) {
     maxSpeed.x = 2;
     maxSpeed.y = 5;
   }

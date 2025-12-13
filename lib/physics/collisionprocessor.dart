@@ -1,5 +1,5 @@
-import 'package:flame/components.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
+import "package:flame/components.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
 
 class CollisionProcessor {
   static List<Hit> process(Iterable<Component> components) {

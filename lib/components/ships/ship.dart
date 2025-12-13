@@ -1,9 +1,9 @@
-import 'dart:ui';
+import "dart:ui";
 
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
-import 'package:flameblasterfaster/physics/collideable.dart';
+import "package:flame/components.dart";
+import "package:flame/flame.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
+import "package:flameblasterfaster/physics/collideable.dart";
 
 typedef Fired = void Function(Ship ship, String weapon, double elevated);
 
@@ -32,10 +32,11 @@ abstract class Ship extends SpriteComponent
     int armour = 2,
     int maxArmour = 2,
     this.fireRate = 0.3,
-  }) : _maxArmour = maxArmour,
-       _timeToNextFire = fireRate ?? 0,
-       _armour = armour,
-       super.fromImage(Flame.images.fromCache(skin), size: Vector2(64.0, 64.0));
+  })  : _maxArmour = maxArmour,
+        _timeToNextFire = fireRate ?? 0,
+        _armour = armour,
+        super.fromImage(Flame.images.fromCache(skin),
+            size: Vector2(64.0, 64.0));
 
   int get health => _armour;
 

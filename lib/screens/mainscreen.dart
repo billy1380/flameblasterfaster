@@ -1,7 +1,7 @@
-import 'package:flame/game.dart';
-import 'package:flameblasterfaster/game/blasterfaster.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import "package:flame/game.dart";
+import "package:flameblasterfaster/game/blasterfaster.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

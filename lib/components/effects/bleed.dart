@@ -1,6 +1,6 @@
-import 'package:flame/components.dart';
-import 'package:flameblasterfaster/components/should_destory.dart';
-import 'package:flutter/material.dart';
+import "package:flame/components.dart";
+import "package:flameblasterfaster/components/should_destory.dart";
+import "package:flutter/material.dart";
 
 class Bleed extends Component implements ShouldDestroy {
   double _duration = 1;
@@ -21,7 +21,7 @@ class Bleed extends Component implements ShouldDestroy {
   @override
   void render(Canvas canvas) {
     Paint p = Paint();
-    p.color = Colors.red.withOpacity(_alpha);
+    p.color = Colors.red.withValues(alpha: _alpha);
     canvas.drawRect(
       Rect.fromLTRB(
         camera.viewport.position.x,
