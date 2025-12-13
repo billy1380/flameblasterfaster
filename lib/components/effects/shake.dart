@@ -8,11 +8,7 @@ class Shake extends Component implements ShouldDestroy {
   double intensity;
   final CameraComponent camera;
 
-  Shake(
-    this.camera, {
-    this.duration = 1,
-    this.intensity = 100,
-  });
+  Shake(this.camera, {this.duration = 1, this.intensity = 100});
 
   @override
   void render(Canvas canvas) {}

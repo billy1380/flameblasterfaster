@@ -35,9 +35,7 @@ import 'package:flutter/services.dart';
 
 class BlasterFaster extends FlameGame
     with HasKeyboardHandlerComponents, HorizontalDragDetector {
-  BlasterFaster({
-    required this.canQuit,
-  });
+  BlasterFaster({required this.canQuit});
 
   Player? player;
   TextButtonComponent? _startButton;
@@ -105,10 +103,8 @@ class BlasterFaster extends FlameGame
     await loadImage("button_pressed.png");
   }
 
-  FutureOr<void> loadImage(String fileName) => images.load(
-        fileName,
-        key: fileName,
-      );
+  FutureOr<void> loadImage(String fileName) =>
+      images.load(fileName, key: fileName);
 
   void start() {
     children.where((e) => e is! ParallaxComponent).forEach((e) => remove(e));
@@ -137,8 +133,8 @@ class BlasterFaster extends FlameGame
   }
 
   void _addPlayer() {
-    add(player = Player(
-      (ship, weapon, elevated) {
+    add(
+      player = Player((ship, weapon, elevated) {
         _addPrimaryBulets(ship, weapon);
 
         if (elevated > 0) {
@@ -146,8 +142,8 @@ class BlasterFaster extends FlameGame
         }
 
         AudioManager.play("laser_ship.wav");
-      },
-    ));
+      }),
+    );
   }
 
   @override
@@ -173,9 +169,11 @@ class BlasterFaster extends FlameGame
               (h.a is Enemy && h.b is Bullet && (h.b as Bullet).isPlayer) ||
               (h.b is Player && h.a is Bullet && (h.a as Bullet).isEnemy) ||
               (h.b is Enemy && h.a is Bullet && (h.a as Bullet).isPlayer)) {
-            add(Flare()
-              ..x = h.a.frame.topLeft.dx
-              ..y = h.a.frame.topLeft.dy);
+            add(
+              Flare()
+                ..x = h.a.frame.topLeft.dx
+                ..y = h.a.frame.topLeft.dy,
+            );
           }
         }
 
@@ -196,9 +194,11 @@ class BlasterFaster extends FlameGame
             }
 
             if (c.isDead) {
-              add(Explosion()
-                ..x = c.frame.topLeft.dx
-                ..y = c.frame.topLeft.dy);
+              add(
+                Explosion()
+                  ..x = c.frame.topLeft.dx
+                  ..y = c.frame.topLeft.dy,
+              );
 
               add(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
             }
@@ -206,9 +206,11 @@ class BlasterFaster extends FlameGame
             if (c.isDead) {
               dead++;
 
-              add(Explosion()
-                ..x = c.frame.topLeft.dx
-                ..y = c.frame.topLeft.dy);
+              add(
+                Explosion()
+                  ..x = c.frame.topLeft.dx
+                  ..y = c.frame.topLeft.dy,
+              );
               add(Smoke(c.frame.topLeft.dx, c.frame.topLeft.dy));
               add(Shake(camera, intensity: 10));
             }
@@ -268,52 +270,63 @@ class BlasterFaster extends FlameGame
   }
 
   void _addStars() {
-    add(ParallaxComponent(
-      parallax: Parallax(
-        [
+    add(
+      ParallaxComponent(
+        parallax: Parallax([
           ParallaxLayer(
-            ParallaxImage(Flame.images.fromCache("stars_far.png"),
-                repeat: ImageRepeat.repeatY, alignment: Alignment.center),
+            ParallaxImage(
+              Flame.images.fromCache("stars_far.png"),
+              repeat: ImageRepeat.repeatY,
+              alignment: Alignment.center,
+            ),
             velocityMultiplier: Vector2(0, -5),
           ),
           ParallaxLayer(
-            ParallaxImage(Flame.images.fromCache("stars_close.png"),
-                repeat: ImageRepeat.repeatY, alignment: Alignment.center),
+            ParallaxImage(
+              Flame.images.fromCache("stars_close.png"),
+              repeat: ImageRepeat.repeatY,
+              alignment: Alignment.center,
+            ),
             velocityMultiplier: Vector2(0, -15),
-          )
-        ],
-        baseVelocity: Vector2(0, 5),
+          ),
+        ], baseVelocity: Vector2(0, 5)),
       ),
-    ));
+    );
   }
 
   void _addButtons() {
-    add(_startButton = TextButtonComponent(
-      label: "Start",
-      onPressed: () => start(),
-    ));
+    add(
+      _startButton = TextButtonComponent(
+        label: "Start",
+        onPressed: () => start(),
+      ),
+    );
 
     if (canQuit) {
-      add(_quitButton = TextButtonComponent(
-        label: "Quit",
-        onPressed: () => SystemNavigator.pop(),
-      ));
+      add(
+        _quitButton = TextButtonComponent(
+          label: "Quit",
+          onPressed: () => SystemNavigator.pop(),
+        ),
+      );
     }
   }
 
   void _addClever() {
     if (children.whereType<Clever>().length <= 2) {
-      add(Clever(
-        (a, b, c) {
+      add(
+        Clever((a, b, c) {
           Bullet bullet = Bullet(b, up: false);
           double x1 = a.x + a.width * 0.5 - bullet.width * 0.5;
           double y1 = a.y + bullet.height;
-          add(bullet
-            ..x = x1
-            ..y = y1);
+          add(
+            bullet
+              ..x = x1
+              ..y = y1,
+          );
           AudioManager.play("laser_enemy.wav");
-        },
-      ));
+        }),
+      );
     }
   }
 
@@ -353,46 +366,62 @@ class BlasterFaster extends FlameGame
     Bullet first = Bullet(b);
     double x1 = a.x - first.width * 0.5;
     double y1 = a.y + first.height;
-    add(first
-      ..x = x1
-      ..y = y1);
+    add(
+      first
+        ..x = x1
+        ..y = y1,
+    );
 
     Bullet second = Bullet(b);
     double x2 = a.x + a.width - second.width * 0.5;
     double y2 = a.y + second.height;
-    add(second
-      ..x = x2
-      ..y = y2);
+    add(
+      second
+        ..x = x2
+        ..y = y2,
+    );
 
-    add(Flare()
-      ..x = x1
-      ..y = y1);
-    add(Flare()
-      ..x = x2
-      ..y = y2);
+    add(
+      Flare()
+        ..x = x1
+        ..y = y1,
+    );
+    add(
+      Flare()
+        ..x = x2
+        ..y = y2,
+    );
   }
 
   void _addSecondaryBulets(Ship a, String b) {
     Bullet first = Bullet(b);
     double x1 = a.x + first.width * 0.5;
     double y1 = a.y + first.height;
-    add(first
-      ..x = x1
-      ..y = y1);
+    add(
+      first
+        ..x = x1
+        ..y = y1,
+    );
 
     Bullet second = Bullet(b);
     double x2 = a.x + a.width - second.width * 1.5;
     double y2 = a.y + second.height;
-    add(second
-      ..x = x2
-      ..y = y2);
+    add(
+      second
+        ..x = x2
+        ..y = y2,
+    );
 
-    add(Flare()
-      ..x = x1
-      ..y = y1);
-    add(Flare()
-      ..x = x2
-      ..y = y2);
+    add(
+      Flare()
+        ..x = x1
+        ..y = y1,
+    );
+    add(
+      Flare()
+        ..x = x2
+        ..y = y2,
+    );
   }
 
   bool get isRunning => _start && !_stop;

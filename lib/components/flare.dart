@@ -6,10 +6,10 @@ import 'package:flameblasterfaster/components/should_destory.dart';
 
 class Flare extends SpriteComponent implements ShouldDestroy {
   Flare()
-      : super.fromImage(
-          Flame.images.fromCache("flare.png"),
-          size: Vector2(16, 16),
-        );
+    : super.fromImage(
+        Flame.images.fromCache("flare.png"),
+        size: Vector2(16, 16),
+      );
 
   @override
   void update(double dt) {

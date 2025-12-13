@@ -27,7 +27,8 @@ class AudioManager {
       await _loop?.dispose();
 
       _loop = await FlameAudio.loopLongAudio(
-          "music.${!kIsWeb && (Platform.isIOS || Platform.isMacOS) ? "mp3" : "ogg"}");
+        "music.${!kIsWeb && (Platform.isIOS || Platform.isMacOS) ? "mp3" : "ogg"}",
+      );
     }
   }
 
@@ -44,19 +45,21 @@ class AudioManager {
   }
 
   static void load() {
-    FlameAudio.audioCache.loadAll([
-      "powerup.wav",
-      "explosion.wav",
-      "hit_enemy.wav",
-      "hit_ship.wav",
-      "laser_enemy.wav",
-      "laser_ship.wav",
-      if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
-        "music.mp3"
-      else
-        "music.ogg",
-    ]).then((v) {
-      playBackgroundLoop();
-    });
+    FlameAudio.audioCache
+        .loadAll([
+          "powerup.wav",
+          "explosion.wav",
+          "hit_enemy.wav",
+          "hit_ship.wav",
+          "laser_enemy.wav",
+          "laser_ship.wav",
+          if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
+            "music.mp3"
+          else
+            "music.ogg",
+        ])
+        .then((v) {
+          playBackgroundLoop();
+        });
   }
 }

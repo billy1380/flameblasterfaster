@@ -14,9 +14,7 @@ class Score extends Component {
       textRenderer: Fonts.display,
     );
     _bc = SpriteComponent(
-      sprite: Sprite(
-        Flame.images.fromCache("score.png"),
-      ),
+      sprite: Sprite(Flame.images.fromCache("score.png")),
       scale: Vector2.all(2),
     );
 

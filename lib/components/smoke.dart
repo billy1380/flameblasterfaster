@@ -8,10 +8,7 @@ import 'package:flutter/material.dart';
 class SmokeParticle extends SpriteParticle {
   double _alpha = NumberHelper.random;
   SmokeParticle()
-      : super(
-          sprite: Sprite(Flame.images.fromCache("smoke.png")),
-          size: _size(),
-        );
+    : super(sprite: Sprite(Flame.images.fromCache("smoke.png")), size: _size());
   static Vector2 _size() {
     double s = 64 * NumberHelper.random;
     return Vector2(s, s);
@@ -37,16 +34,18 @@ class SmokeParticle extends SpriteParticle {
 
 class Smoke extends ParticleSystemComponent {
   Smoke(x, y)
-      : super(
-          particle: Particle.generate(
-            count: 30,
-            generator: (i) => MovingParticle(
-              child: SmokeParticle(),
-              from: Vector2(x, y),
-              to: Vector2(x + 100 * (NumberHelper.random - 0.5),
-                  y + 100 * (NumberHelper.random - 0.5)),
-              lifespan: 10000,
+    : super(
+        particle: Particle.generate(
+          count: 30,
+          generator: (i) => MovingParticle(
+            child: SmokeParticle(),
+            from: Vector2(x, y),
+            to: Vector2(
+              x + 100 * (NumberHelper.random - 0.5),
+              y + 100 * (NumberHelper.random - 0.5),
             ),
+            lifespan: 10000,
           ),
-        );
+        ),
+      );
 }

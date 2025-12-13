@@ -14,13 +14,8 @@ class Bullet extends SpriteComponent implements Collidable, ShouldDestroy {
   String skin;
   bool _hit = false;
 
-  Bullet(
-    this.skin, {
-    this.up = true,
-  }) : super.fromImage(
-          Flame.images.fromCache(skin),
-          size: Vector2(32, 32),
-        ) {
+  Bullet(this.skin, {this.up = true})
+    : super.fromImage(Flame.images.fromCache(skin), size: Vector2(32, 32)) {
     width *= 0.5;
     height *= 0.5;
   }

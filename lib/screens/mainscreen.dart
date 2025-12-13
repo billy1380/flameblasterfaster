@@ -30,9 +30,5 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildScreen() => GameWidget(
-        game: BlasterFaster(
-          canQuit: !kIsWeb,
-        ),
-      );
+  Widget _buildScreen() => GameWidget(game: BlasterFaster(canQuit: !kIsWeb));
 }

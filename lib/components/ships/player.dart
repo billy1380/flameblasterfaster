@@ -11,13 +11,13 @@ class Player extends Ship {
   double _elevatedFirePower = 0;
 
   Player(Fired onFire)
-      : super(
-          "ship.png",
-          weaponName: "laser_ship.png",
-          onFire: onFire,
-          armour: 4,
-          maxArmour: 4,
-        );
+    : super(
+        "ship.png",
+        weaponName: "laser_ship.png",
+        onFire: onFire,
+        armour: 4,
+        maxArmour: 4,
+      );
 
   @override
   void onGameResize(Vector2 size) {

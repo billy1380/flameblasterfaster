@@ -14,11 +14,8 @@ abstract class PowerUp extends SpriteComponent
   bool _consumed = false;
 
   PowerUp(String skin)
-      : _start = NumberHelper.random,
-        super.fromImage(
-          Flame.images.fromCache(skin),
-          size: Vector2(28.0, 28.0),
-        );
+    : _start = NumberHelper.random,
+      super.fromImage(Flame.images.fromCache(skin), size: Vector2(28.0, 28.0));
 
   @override
   void onGameResize(Vector2 size) {

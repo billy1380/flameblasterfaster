@@ -9,10 +9,7 @@ class Bleed extends Component implements ShouldDestroy {
   final CameraComponent camera;
   late Vector2 _size;
 
-  Bleed(this.camera, this._duration)
-      : super(
-          priority: 99,
-        );
+  Bleed(this.camera, this._duration) : super(priority: 99);
 
   @override
   void onGameResize(Vector2 size) {
@@ -26,9 +23,14 @@ class Bleed extends Component implements ShouldDestroy {
     Paint p = Paint();
     p.color = Colors.red.withOpacity(_alpha);
     canvas.drawRect(
-        Rect.fromLTRB(camera.viewport.position.x, camera.viewport.position.y,
-            _size.x, _size.y),
-        p);
+      Rect.fromLTRB(
+        camera.viewport.position.x,
+        camera.viewport.position.y,
+        _size.x,
+        _size.y,
+      ),
+      p,
+    );
   }
 
   @override

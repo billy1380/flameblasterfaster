@@ -7,8 +7,10 @@ import 'package:flameblasterfaster/game/audio_manager.dart';
 
 class Explosion extends SpriteComponent implements ShouldDestroy {
   Explosion()
-      : super.fromImage(Flame.images.fromCache("explosion.png"),
-            size: Vector2(64, 64)) {
+    : super.fromImage(
+        Flame.images.fromCache("explosion.png"),
+        size: Vector2(64, 64),
+      ) {
     AudioManager.play("explosion.wav");
   }
 
