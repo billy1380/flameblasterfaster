@@ -56,8 +56,6 @@ class AudioManager {
         "music.mp3"
       else
         "music.ogg",
-    ]).then((v) {
-      playBackgroundLoop();
-    });
+    ]);
   }
 }

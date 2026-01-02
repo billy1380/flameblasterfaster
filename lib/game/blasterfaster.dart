@@ -53,14 +53,12 @@ class BlasterFaster extends FlameGame
     await super.onLoad();
     // AudioManager.mute();
 
-    if (kIsWeb) {
-      AudioManager.playBackgroundLoop();
-    } else {
+    if (!kIsWeb) {
       await Flame.device.fullScreen();
       await Flame.device.setOrientation(DeviceOrientation.portraitUp);
-
-      AudioManager.load();
     }
+
+    AudioManager.load();
 
     await _loadAssets();
 
@@ -107,6 +105,7 @@ class BlasterFaster extends FlameGame
       images.load(fileName, key: fileName);
 
   void start() {
+    AudioManager.playBackgroundLoop();
     children.where((e) => e is! ParallaxComponent).forEach((e) => remove(e));
 
     _addPlayer();
