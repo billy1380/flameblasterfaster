@@ -58,7 +58,7 @@ class BlasterFaster extends FlameGame
       await Flame.device.setOrientation(DeviceOrientation.portraitUp);
     }
 
-    AudioManager.load();
+    await AudioManager.load();
 
     await _loadAssets();
 

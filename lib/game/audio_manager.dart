@@ -8,6 +8,7 @@ class AudioManager {
   static final Logger _log = Logger("AudioManager");
   static bool _muted = false;
   static AudioPlayer? _loop;
+  static final Map<String, AudioPool> _pools = {};
 
   static void mute() {
     _muted = true;
@@ -36,7 +37,11 @@ class AudioManager {
     if (_muted) {
       _log.info("Not playing $name because muted is $_muted");
     } else {
-      FlameAudio.play(name);
+      if (_pools.containsKey(name)) {
+        _pools[name]!.start();
+      } else {
+        FlameAudio.play(name);
+      }
     }
   }
 
@@ -44,14 +49,25 @@ class AudioManager {
     _loop?.stop();
   }
 
-  static void load() {
-    FlameAudio.audioCache.loadAll([
+  static Future<void> load() async {
+    List<String> poolFiles = [
       "powerup.wav",
       "explosion.wav",
       "hit_enemy.wav",
       "hit_ship.wav",
       "laser_enemy.wav",
       "laser_ship.wav",
+    ];
+
+    for (String file in poolFiles) {
+      _pools[file] = await FlameAudio.createPool(
+        file,
+        maxPlayers: 4,
+        minPlayers: 1,
+      );
+    }
+
+    FlameAudio.audioCache.loadAll([
       if (!kIsWeb && (Platform.isIOS || Platform.isMacOS))
         "music.mp3"
       else
