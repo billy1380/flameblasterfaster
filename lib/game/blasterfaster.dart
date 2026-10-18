@@ -68,6 +68,15 @@ class BlasterFaster extends FlameGame
   }
 
   @override
+  void onRemove() {
+    // The music loop is global, so it keeps playing after the game widget has
+    // gone unless it is stopped here.
+    AudioManager.stopBackgroundLoop();
+
+    super.onRemove();
+  }
+
+  @override
   void pauseEngine() {
     super.pauseEngine();
 

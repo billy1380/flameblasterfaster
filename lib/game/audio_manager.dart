@@ -8,6 +8,7 @@ class AudioManager {
   static final Logger _log = Logger("AudioManager");
   static bool _muted = false;
   static AudioPlayer? _loop;
+  static int _loopRequest = 0;
   static final Map<String, AudioPool> _pools = {};
 
   static void mute() {
@@ -24,12 +25,28 @@ class AudioManager {
     if (_muted) {
       _log.info("Not playing background music because muted is $_muted");
     } else {
-      await _loop?.stop();
-      await _loop?.dispose();
+      // Each call supersedes earlier ones, including stopBackgroundLoop, so a
+      // loop that finishes loading after it was stopped does not start playing.
+      final int request = ++_loopRequest;
 
-      _loop = await FlameAudio.loopLongAudio(
+      final AudioPlayer? previous = _loop;
+      _loop = null;
+      await previous?.stop();
+      await previous?.dispose();
+
+      if (request != _loopRequest) return;
+
+      final AudioPlayer loop = await FlameAudio.loopLongAudio(
         "music.${!kIsWeb && (Platform.isIOS || Platform.isMacOS) ? "mp3" : "ogg"}",
       );
+
+      if (request != _loopRequest) {
+        await loop.stop();
+        await loop.dispose();
+        return;
+      }
+
+      _loop = loop;
     }
   }
 
@@ -46,7 +63,12 @@ class AudioManager {
   }
 
   static void stopBackgroundLoop() {
-    _loop?.stop();
+    _loopRequest++;
+
+    final AudioPlayer? loop = _loop;
+    _loop = null;
+    loop?.stop();
+    loop?.dispose();
   }
 
   static Future<void> load() async {
