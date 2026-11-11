@@ -7,7 +7,7 @@ class Score extends Component {
   late TextComponent _tc;
   late SpriteComponent _bc;
 
-  Score() {
+  Score() : super(priority: 100) {
     _tc = TextComponent(
       text: 0.toString().padLeft(6, "0"),
       priority: 100,

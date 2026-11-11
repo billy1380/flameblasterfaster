@@ -13,6 +13,7 @@ import "package:flameblasterfaster/components/effects/shake.dart";
 import "package:flameblasterfaster/components/explosion.dart";
 import "package:flameblasterfaster/components/flare.dart";
 import "package:flameblasterfaster/components/hud/health.dart";
+import "package:flameblasterfaster/components/hud/mute_button.dart";
 import "package:flameblasterfaster/components/hud/score.dart";
 import "package:flameblasterfaster/components/powerups/armour.dart";
 import "package:flameblasterfaster/components/powerups/laser.dart";
@@ -40,6 +41,7 @@ class BlasterFaster extends FlameGame
   Player? player;
   TextButtonComponent? _startButton;
   TextButtonComponent? _quitButton;
+  MuteButton? _muteButton;
   bool _stop = false;
   bool _start = false;
   final bool canQuit;
@@ -51,7 +53,7 @@ class BlasterFaster extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // AudioManager.mute();
+    AudioManager.mute();
 
     if (!kIsWeb) {
       await Flame.device.fullScreen();
@@ -65,6 +67,9 @@ class BlasterFaster extends FlameGame
     await _addStars();
 
     _addButtons();
+
+    add(_muteButton = MuteButton());
+    _placeMuteButton(inGame: false);
   }
 
   @override
@@ -115,7 +120,14 @@ class BlasterFaster extends FlameGame
 
   void start() {
     AudioManager.playBackgroundLoop();
-    children.where((e) => e is! ParallaxComponent).forEach((e) => remove(e));
+    children
+        .where(
+          (e) =>
+              e is! ParallaxComponent && e is! MuteButton && e is! Dispatcher,
+        )
+        .forEach((e) => remove(e));
+
+    _placeMuteButton(inGame: true);
 
     _addPlayer();
 
@@ -131,6 +143,8 @@ class BlasterFaster extends FlameGame
   }
 
   void finished() {
+    _placeMuteButton(inGame: false);
+
     if (_startButton != null) {
       add(_startButton!);
     }
@@ -456,6 +470,27 @@ class BlasterFaster extends FlameGame
     endMove();
   }
 
+  bool _muteInGame = false;
+
+  void _placeMuteButton({required bool inGame}) {
+    _muteInGame = inGame;
+
+    final MuteButton? mute = _muteButton;
+    if (mute == null) return;
+
+    final Vector2 view = camera.viewport.size;
+    if (inGame) {
+      mute.anchor = Anchor.topRight;
+      mute.position.setValues(view.x - 12, 66);
+    } else {
+      mute.anchor = Anchor.topCenter;
+      mute.position.setValues(
+        view.x * 0.5,
+        view.y * 0.5 + (canQuit ? 20 : -(kIsWeb ? 0 : 20)) + 16 + 12,
+      );
+    }
+  }
+
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
@@ -469,5 +504,7 @@ class BlasterFaster extends FlameGame
       camera.viewport.size.x * 0.5,
       camera.viewport.size.y * 0.5 + 20,
     );
+
+    _placeMuteButton(inGame: _muteInGame);
   }
 }

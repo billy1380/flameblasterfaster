@@ -11,6 +11,10 @@ class AudioManager {
   static int _loopRequest = 0;
   static final Map<String, AudioPool> _pools = {};
 
+  static bool _wantLoop = false;
+
+  static bool get muted => _muted;
+
   static void mute() {
     _muted = true;
     _loop?.pause();
@@ -18,10 +22,17 @@ class AudioManager {
 
   static void unmute() {
     _muted = false;
-    _loop?.resume();
+
+    if (_loop != null) {
+      _loop!.resume();
+    } else if (_wantLoop) {
+      playBackgroundLoop();
+    }
   }
 
   static Future<void> playBackgroundLoop() async {
+    _wantLoop = true;
+
     if (_muted) {
       _log.info("Not playing background music because muted is $_muted");
     } else {
@@ -63,6 +74,7 @@ class AudioManager {
   }
 
   static void stopBackgroundLoop() {
+    _wantLoop = false;
     _loopRequest++;
 
     final AudioPlayer? loop = _loop;
